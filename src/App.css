@@ -1,0 +1,25 @@
+/* HEADER */
+
+.header{
+    background-color: #cfea049f;
+    /* background-image: url('./header-background.jpg'); */
+    height: 500px;
+    max-width: inherit;
+    background-size: contain;
+}
+
+/* NAVBAR */
+
+.title {
+    font-family: 'Itim', cursive;
+    /* font-family: 'Roboto', sans-serif; */
+}
+.nav-item-color{
+    color: aliceblue !important;
+}
+
+/* CURRENCY CONVERTER BOX */
+
+.currency-converter{
+    background-color: #fcd80a !important;
+}
