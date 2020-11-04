@@ -21,7 +21,7 @@ function Converter() {
                         </Col>
                         <Col  xs={6} md={3}>
                             <Form.Group controlId="formBasicEmail">
-                                <Form.Label>To</Form.Label>
+                                <Form.Label>To</Form.Label>   
                                 <Form.Control type="text" placeholder="Enter email" />
                             </Form.Group>
                         </Col>
