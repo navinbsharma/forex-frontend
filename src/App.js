@@ -3,7 +3,9 @@ import './componenets/navbar'
 import Navbar from './componenets/navbar';
 import Converter from './componenets/Converter';
 import CompanySearchData from "./componenets/CompanySearchData";
+import Companies from './componenets/Companies';
 import './App.css';
+import '../node_modules/bootstrap/dist/css/bootstrap.css';
 
 function App() {
   return (
@@ -13,7 +15,18 @@ function App() {
         <Converter />
       </div>
       <div>
-        <CompanySearchData />
+        <Companies 
+          title ="Title here "  
+          content = " Content Here"
+          />
+          <Companies 
+          title ="Title here "  
+          content = " Content Here"
+          />
+          <Companies 
+          title ="Title here "  
+          content = " Content Here"
+          />
       </div>
     </div>
   );
