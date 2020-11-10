@@ -415,8 +415,7 @@ function Converter() {
                         <Col xs={6} md={3}>
                             <Form.Group controlId="formBasicEmail">
                                 <Form.Label>From</Form.Label>
-                                <Form.Control name="fromCurrency" as="select" onChange={handleChange}><option>{CountryCodeData.map(MakeItem)}</option>
-                                \</Form.Control>
+                                <Form.Control name="toCurrency" as="select" onChange={handleChange}>{CountryCodeData.map(MakeItem)}</Form.Control>
                             </Form.Group>
                         </Col>
                         <Col xs={6} md={3}>
