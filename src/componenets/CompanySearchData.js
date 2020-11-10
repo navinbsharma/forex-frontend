@@ -1,6 +1,8 @@
 import { Card, Button, Form, Row, Col } from 'react-bootstrap'
 
 function CompanySearchData() {
+
+    
     return (<div className="m-3 p-4">
         <Card className="currency-converter">
             <Card.Body>

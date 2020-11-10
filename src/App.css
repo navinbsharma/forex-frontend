@@ -1,7 +1,11 @@
+body{
+    color: #f6f5f5 !important;
+}
+
 /* HEADER */
 
 .header{
-    background-color: #cfea049f;
+    background-image: linear-gradient(to right, #1a1a2e , #0f3460);
     /* background-image: url('./header-background.jpg'); */
     height: 500px;
     max-width: inherit;
@@ -21,5 +25,5 @@
 /* CURRENCY CONVERTER BOX */
 
 .currency-converter{
-    background-color: #fcd80a !important;
+    background-color: #393e46 !important;
 }
