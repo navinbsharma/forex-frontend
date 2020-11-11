@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Card, Button, Form, Row, Col } from 'react-bootstrap';
+import { Card, Button, Form, Row, Col, Alert } from 'react-bootstrap';
 import { getAjaxCall } from '../services/AjaxCall';
 import { apiUrls } from "../services/apiURLS";
+import { BsArrowLeftRight } from "react-icons/bs";
 
 function Converter() {
     const [amountState, setAmountState] = useState({
@@ -9,185 +10,18 @@ function Converter() {
         errorAmount: '',
         errorAmountMessage: '',
     });
-    
-    const [error, setError] = useState(null);
-    const [isLoaded, setIsLoaded] = useState(false);
-    const [currencyCountryData, setCurrencyCountryDataState] = useState('');
+
+    const [flag, setFlagState] = useState(false);
+
+    // const [error, setError] = useState(null);
+    // const [isLoaded, setIsLoaded] = useState(false);
+    // const [currencyCountryData, setCurrencyCountryDataState] = useState('');
     const [fromCurrencyState, setFromCurrencyState] = useState('AFN');
     const [toCurrencyState, setToCurrencyState] = useState('AFN');
+    const [resultCurrency, setResultCurrencyState] = useState(0);
+    const [resultFromCurrency, setResultFromCurrencyState] = useState('AFN');
+    const [resultToCurrency, setResultToCurrencyState] = useState('AFN');
 
-
-    const [CountryCodeData, setCountryDataState] = useState([
-        "AFN",
-        "ALL",
-        "AED",
-        "AMD",
-        "ANG",
-        "AOA",
-        "ARS",
-        "AUD",
-        "AWG",
-        "AZN",
-        "BAM",
-        "BBD",
-        "BDT",
-        "BGN",
-        "BHD",
-        "BIF",
-        "BMD",
-        "BND",
-        "BOB",
-        "BRL",
-        "BSD",
-        "BTC",
-        "BTN",
-        "BWP",
-        "BYN",
-        "BYR",
-        "BZD",
-        "CAD",
-        "CDF",
-        "CHF",
-        "CLF",
-        "CLP",
-        "CNY",
-        "COP",
-        "CRC",
-        "CUC",
-        "CUP",
-        "CVE",
-        "CZK",
-        "DJF",
-        "DKK",
-        "DOP",
-        "DZD",
-        "EGP",
-        "ERN",
-        "ETB",
-        "EUR",
-        "FJD",
-        "FKP",
-        "GBP",
-        "GEL",
-        "GGP",
-        "GHS",
-        "GIP",
-        "GMD",
-        "GNF",
-        "GTQ",
-        "GYD",
-        "HKD",
-        "HNL",
-        "HRK",
-        "HTG",
-        "HUF",
-        "IDR",
-        "ILS",
-        "IMP",
-        "INR",
-        "IQD",
-        "IRR",
-        "ISK",
-        "JEP",
-        "JMD",
-        "JOD",
-        "JPY",
-        "KES",
-        "KGS",
-        "KHR",
-        "KMF",
-        "KPW",
-        "KRW",
-        "KWD",
-        "KYD",
-        "KZT",
-        "LAK",
-        "LBP",
-        "LKR",
-        "LRD",
-        "LSL",
-        "LTL",
-        "LVL",
-        "LYD",
-        "MAD",
-        "MDL",
-        "MGA",
-        "MKD",
-        "MMK",
-        "MNT",
-        "MOP",
-        "MRO",
-        "MUR",
-        "MVR",
-        "MWK",
-        "MXN",
-        "MYR",
-        "MZN",
-        "NAD",
-        "NGN",
-        "NIO",
-        "NOK",
-        "NPR",
-        "NZD",
-        "OMR",
-        "PAB",
-        "PEN",
-        "PGK",
-        "PHP",
-        "PKR",
-        "PLN",
-        "PYG",
-        "QAR",
-        "RON",
-        "RSD",
-        "RUB",
-        "RWF",
-        "SAR",
-        "SBD",
-        "SCR",
-        "SDG",
-        "SEK",
-        "SGD",
-        "SHP",
-        "SLL",
-        "SOS",
-        "SRD",
-        "STD",
-        "SVC",
-        "SYP",
-        "SZL",
-        "THB",
-        "TJS",
-        "TMT",
-        "TND",
-        "TOP",
-        "TRY",
-        "TTD",
-        "TWD",
-        "TZS",
-        "UAH",
-        "UGX",
-        "USD",
-        "UYU",
-        "UZS",
-        "VEF",
-        "VND",
-        "VUV",
-        "WST",
-        "XAF",
-        "XAG",
-        "XAU",
-        "XCD",
-        "XDR",
-        "XOF",
-        "XPF",
-        "YER",
-        "ZAR",
-        "ZMK",
-        "ZMW",
-        "ZWL"
-    ],
-    );
 
     const symbols = {
         "AED": "United Arab Emirates Dirham",
@@ -359,8 +193,8 @@ function Converter() {
         "ZMW": "Zambian Kwacha",
         "ZWL": "Zimbabwean Dollar"
     }
-    const MakeItem = function (X) {
-        return <option>{X}</option>;
+    const MakeItem = function (X, Y) {
+        return <option value={X}>{Y}</option>;
     };
 
     const handleChange = ({ target }) => {
@@ -373,11 +207,10 @@ function Converter() {
             }
         }
         if (name === 'fromCurrency') {
-            setFromCurrencyState(() => ({ fromCurrencyState: value }));
+            setFromCurrencyState(value);
         }
         if (name === 'toCurrency') {
-            setToCurrencyState(() => ({ toCurrencyState: value }));
-            console.log(toCurrencyState);
+            setToCurrencyState(value);
         }
     }
 
@@ -386,27 +219,51 @@ function Converter() {
         let { amount, errorAmount, errorAmountMessage } = amountState;
         e.preventDefault();
         if (amount.length > 0) {
+            let currencyFromTo = fromCurrencyState + '_' + toCurrencyState;
             let apiAuth = apiUrls.convertMoney;
             const reqBody = {
                 amount,
-                fromCurrency: fromCurrencyState.fromCurrencyState,
-                toCurrency: toCurrencyState.toCurrencyState,
+                q: currencyFromTo,
             }
-            apiAuth = apiAuth + reqBody.fromCurrency + ',' + reqBody.toCurrency
-            getAjaxCall(apiAuth, callback => {
-                console.log(callback.data);
+            getAjaxCall(apiAuth, reqBody, callback => {
+                console.log(callback)
+                if (Object.keys(callback.data).length !== 0) {
+                    setFlagState(true);
+                    setResultCurrencyState(callback.data[Object.keys(callback.data)]);
+                    setResultFromCurrencyState(fromCurrencyState);
+                } else {
+
+                }
             });
         }
     }
 
-   
+    const OutputResult = () => {
+        return (<div>
+            <Card className="convert-result-box">
+                <Card.Title>Result</Card.Title>
+                <Card.Body>
+                    1 {resultFromCurrency} = {resultCurrency} {toCurrencyState}<br />
+                    {amountState.amount} {resultFromCurrency} = {resultCurrency * amountState.amount} {toCurrencyState}
+                </Card.Body>
+            </Card>
+        </div >)
+    }
+
+    const handleReverse = (e) => {
+        console.log(document.getElementsByName('toCurrency').value);
+    }
+
+
+
+
     return (<div className="m-3 p-4">
         <Card className="currency-converter">
             <Card.Body>
                 <Card.Title>FOREX AGGREGRATOR</Card.Title>
                 <Form onSubmit={handleSubmit}>
                     <Row>
-                        <Col xs={12} md={4}>
+                        <Col xs={12} md={3}>
                             <Form.Group controlId="formBasicEmail">
                                 <Form.Label>Amount</Form.Label>
                                 <Form.Control type="number" placeholder="Amount" name="amount" value={amountState.amount} onChange={handleChange} />
@@ -415,22 +272,29 @@ function Converter() {
                         <Col xs={6} md={3}>
                             <Form.Group controlId="formBasicEmail">
                                 <Form.Label>From</Form.Label>
-                                <Form.Control name="toCurrency" as="select" onChange={handleChange}>{CountryCodeData.map(MakeItem)}</Form.Control>
+                                <Form.Control name="fromCurrency" as="select" onChange={handleChange}>{Object.keys(symbols).map((code) => MakeItem(code, symbols[code]))}</Form.Control>
                             </Form.Group>
+                        </Col>
+                        <Col xs={12} md={1} className="currency-converter">
+                            <Button onClick={handleReverse}><BsArrowLeftRight /></Button>
                         </Col>
                         <Col xs={6} md={3}>
                             <Form.Group controlId="formBasicEmail">
                                 <Form.Label>To</Form.Label>
-                                <Form.Control name="toCurrency" as="select" onChange={handleChange}>{CountryCodeData.map(MakeItem)}</Form.Control>
+                                <Form.Control name="toCurrency" as="select" onChange={handleChange}>{Object.keys(symbols).map((code) => MakeItem(code, symbols[code]))}</Form.Control>
                             </Form.Group>
                         </Col>
                         <Col xs={12} md={2}>
-                            <Button variant="primary" type="submit" onClick={handleSubmit}>Go</Button>
+                            <Button variant="primary" onClick={handleSubmit}>Go</Button>
                         </Col>
                     </Row>
                 </Form>
             </Card.Body>
         </Card>
+        { flag && <OutputResult />}
+
+
+
     </div>)
 
 }

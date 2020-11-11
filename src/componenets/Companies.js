@@ -1,42 +1,30 @@
-import React, { useState, useRef } from "react";
-import "./Companies.css";
-import Chevron from "./Chevron";
+import React, { useState } from 'react';
+import { AgGridColumn, AgGridReact } from 'ag-grid-react';
 
-function Companies(props) {
-  const [setActive, setActiveState] = useState("");
-  const [setHeight, setHeightState] = useState("0px");
-  const [setRotate, setRotateState] = useState("accordion__icon");
+import 'ag-grid-community/dist/styles/ag-grid.css';
+import 'ag-grid-community/dist/styles/ag-theme-alpine-dark.css';
 
-  const content = useRef(null);
 
-  function toggleAccordion() {
-    setActiveState(setActive === "" ? "active" : "");
-    setHeightState(
-      setActive === "active" ? "0px" : `${content.current.scrollHeight}px`
-    );
-    setRotateState(
-      setActive === "active" ? "accordion__icon" : "accordion__icon rotate"
-    );
-  }
+const Companies = () => {
+  const [gridApi, setGridApi] = useState(null);
+  const [gridColumnApi, setGridColumnApi] = useState(null);
+
+  const [rowData, setRowData] = useState([
+    { make: "Toyota", model: "Celica", price: 35000 },
+    { make: "Ford", model: "Mondeo", price: 32000 },
+    { make: "Porsche", model: "Boxter", price: 72000 }
+  ]);
 
   return (
-    <div className="accordion__section">
-      <button className={`accordion ${setActive}`} onClick={toggleAccordion}>
-        <p className="accordion__title">{props.title}</p>
-        <Chevron className={`${setRotate}`} width={10} fill={"#192A56"} />
-      </button>
-      <div
-        ref={content}
-        style={{ maxHeight: `${setHeight}` }}
-        className="accordion__content"
-      >
-        <div
-          className="accordion__text"
-          dangerouslySetInnerHTML={{ __html: props.content }}
-        />
-      </div>
+    <div className="ag-theme-alpine-dark" style={{ height: 400, width: 600 }}>
+      <AgGridReact
+        rowData={rowData}>
+        <AgGridColumn field="make" sortable={true} filter={true} ></AgGridColumn>
+        <AgGridColumn field="model" sortable={true} filter={true} ></AgGridColumn>
+        <AgGridColumn field="price" sortable={true} filter={true} ></AgGridColumn>
+      </AgGridReact>
     </div>
   );
-}
+};
 
- export default Companies;
+export default Companies;

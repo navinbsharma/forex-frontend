@@ -1,5 +1,6 @@
 body{
     color: #f6f5f5 !important;
+    text-align: center;
 }
 
 /* HEADER */
@@ -7,7 +8,7 @@ body{
 .header{
     background-image: linear-gradient(to right, #1a1a2e , #0f3460);
     /* background-image: url('./header-background.jpg'); */
-    height: 500px;
+    /* height: 500px; */
     max-width: inherit;
     background-size: contain;
 }
@@ -24,6 +25,22 @@ body{
 
 /* CURRENCY CONVERTER BOX */
 
-.currency-converter{
+.currency-converter {
     background-color: #393e46 !important;
+}
+
+
+
+/* CURRENCY CONVERTER RESULT BOX */
+.convert-result-box{
+    text-align: center;
+    margin-top: 2rem;
+    background-color: #393e46 !important;    
+}
+.ag-theme-alpine-dark{
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+    height: 400;
+    width: 600;
 }

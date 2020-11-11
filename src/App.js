@@ -15,18 +15,8 @@ function App() {
         <Converter />
       </div>
       <div>
-        <Companies 
-          title ="Title here "  
-          content = " Content Here"
-          />
-          <Companies 
-          title ="Title here "  
-          content = " Content Here"
-          />
-          <Companies 
-          title ="Title here "  
-          content = " Content Here"
-          />
+        <Companies />
+         
       </div>
     </div>
   );
