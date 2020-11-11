@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import "./Companies.css";
 import Chevron from "./Chevron";
+import ReactBootstrap from 'react-bootstrap';
 
 function Companies(props) {
   const [setActive, setActiveState] = useState("");
