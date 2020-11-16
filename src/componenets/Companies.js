@@ -16,12 +16,13 @@ const Companies = () => {
   ]);
 
   return (
-    <div className="ag-theme-alpine-dark" style={{ height: 400, width: 600 }}>
+    <div className="ag-theme-alpine-dark" style={{ height: 400, width: 900 }}>
       <AgGridReact
         rowData={rowData}>
         <AgGridColumn field="make" sortable={true} filter={true} ></AgGridColumn>
         <AgGridColumn field="model" sortable={true} filter={true} ></AgGridColumn>
         <AgGridColumn field="price" sortable={true} filter={true} ></AgGridColumn>
+        
       </AgGridReact>
     </div>
   );

@@ -4,6 +4,7 @@ import Navbar from './componenets/navbar';
 import Converter from './componenets/Converter';
 import CompanySearchData from "./componenets/CompanySearchData";
 import Companies from './componenets/Companies';
+import LineChart from './componenets/LineChart';
 import './App.css';
 import '../node_modules/bootstrap/dist/css/bootstrap.css';
 
@@ -18,6 +19,7 @@ function App() {
         <Companies />
          
       </div>
+      
     </div>
   );
 }

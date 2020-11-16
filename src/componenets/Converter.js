@@ -276,6 +276,7 @@ function Converter() {
                             </Form.Group>
                         </Col>
                         <Col xs={12} md={1} className="currency-converter">
+                            
                             <Button onClick={handleReverse}><BsArrowLeftRight /></Button>
                         </Col>
                         <Col xs={6} md={3}>
