@@ -1,15 +1,222 @@
 import React, { useState, useEffect } from 'react';
-const { Row, Col, Button } = require("react-bootstrap")
 
 
+
+import Grid from '@material-ui/core/Grid';
+import Chart from 'chart.js';
+
+
+import PropTypes from 'prop-types';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+import Box from '@material-ui/core/Box';
+import Collapse from '@material-ui/core/Collapse';
+import IconButton from '@material-ui/core/IconButton';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Typography from '@material-ui/core/Typography';
+import Paper from '@material-ui/core/Paper';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import AllChart from './AllChart';
+
+const useRowStyles = makeStyles({
+    root: {
+        '& > *': {
+            borderBottom: 'unset',
+        },
+    },
+});
+const useStyles = makeStyles((theme) => ({
+    root: {
+
+        flexGrow: 1,
+    },
+    container: {
+        maxHeight: '100%',
+    },
+    paper: {
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+    },
+}));
+
+const StyledTableCell = withStyles((theme) => ({
+    head: {
+        backgroundColor: "#0f3460",
+        color: theme.palette.common.white,
+    },
+    body: {
+        fontSize: 14,
+    },
+}))(TableCell);
+const StyledTableRow = withStyles((theme) => ({
+    root: {
+        '&:nth-of-type(odd)': {
+            backgroundColor: '#f6f5f5',
+        },
+    },
+}))(TableRow);
+
+
+const columns = [
+    { id: 'logo', label: 'Company Logo', minWidth: 170, align: 'center' },
+    { id: 'name', label: 'Name', minWidth: 100, align: 'center', },
+    {
+        id: 'exchange',
+        label: 'Exchange Rate',
+        minWidth: 170,
+        align: 'center',
+        format: (value) => value.toLocaleString('en-US'),
+    },
+    {
+        id: 'fee',
+        label: 'Fees',
+        minWidth: 170,
+        align: 'center',
+        format: (value) => value.toLocaleString('en-US'),
+    },
+    {
+        id: 'recievedAmount',
+        label: "You'll Receive",
+        minWidth: 170,
+        align: 'center',
+        format: (value) => value.toFixed(2),
+    },
+    {
+        id: 'viewMore',
+        label: "Graph $ Charts",
+        minWidth: 170,
+        align: 'center',
+        format: (value) => value.toFixed(2),
+    },
+];
+
+
+
+function Row(props) {
+    const { row } = props;
+    const classes = useRowStyles();
+    const [open, setOpen] = React.useState(false);
+
+
+    return (
+        <React.Fragment>
+            <StyledTableRow className={classes.root}>
+
+                <StyledTableCell align="center" >
+                    <img src={row.logo} style={{ height: 50, width: 50 }} />
+                </StyledTableCell>
+                <StyledTableCell align="center">{row.name}</StyledTableCell>
+                <StyledTableCell align="center">{row.quotes[0].rate}</StyledTableCell>
+                <StyledTableCell align="center">{row.quotes[0].fee}</StyledTableCell>
+                <StyledTableCell align="center">{row.quotes[0].receivedAmount}</StyledTableCell>
+                <StyledTableCell align="center">
+                    <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
+                        {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                    </IconButton>
+                </StyledTableCell>
+            </StyledTableRow>
+            <TableRow>
+                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+                    <Collapse in={open} timeout="auto" unmountOnExit>
+                        <Box margin={1}>
+                            <Typography variant="h6" gutterBottom component="div">
+                                Graphs $ Chart
+                            </Typography>
+                            <div className={classes.root}>
+                                <Grid container spacing={3}>
+                                    <Grid item xs={6}>
+                                        <Paper className={classes.paper}>
+                                            <Table size="small" aria-label="purchases">
+                                                <TableHead>
+                                                    <TableRow>
+                                                        <TableCell>Date</TableCell>
+                                                        <TableCell>Customer</TableCell>
+                                                        <TableCell align="center">Amount</TableCell>
+                                                        <TableCell align="center">Total price ($)</TableCell>
+                                                    </TableRow>
+                                                </TableHead>
+                                            </Table>
+                                        </Paper>
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <Paper className={classes.paper}>
+                                            <AllChart />
+                                        </Paper>
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                        <Paper className={classes.paper}>xs=3</Paper>
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                        <Paper className={classes.paper}>xs=3</Paper>
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                        <Paper className={classes.paper}>xs=3</Paper>
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                        <Paper className={classes.paper}>xs=3</Paper>
+                                    </Grid>
+                                </Grid>
+                            </div>
+                        </Box>
+                    </Collapse>
+                </TableCell>
+            </TableRow>
+            <TableRow>
+                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+                    <Collapse in={open} timeout="auto" unmountOnExit>
+                        <Box margin={1}>
+                            <Typography variant="h6" gutterBottom component="div">
+                                History
+                </Typography>
+                            <Table size="small" aria-label="purchases">
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>Date</TableCell>
+                                        <TableCell>Customer</TableCell>
+                                        <TableCell align="center">Amount</TableCell>
+                                        <TableCell align="center">Total price ($)</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                {/* <TableBody>
+                                    {row.history.map((historyRow) => (
+                                        <TableRow key={historyRow.date}>
+                                        <TableCell component="th" scope="row">
+                                        {historyRow.date}
+                                        </TableCell>
+                                        <TableCell>{historyRow.customerId}</TableCell>
+                                        <TableCell align="right">{historyRow.amount}</TableCell>
+                                        <TableCell align="right">
+                                        {Math.round(historyRow.amount * row.price * 100) / 100}
+                                        </TableCell>
+                                        </TableRow>
+                                        ))}
+                                    </TableBody>  */}
+                            </Table>
+                        </Box>
+                    </Collapse>
+                </TableCell>
+            </TableRow>
+        </React.Fragment>
+    );
+}
 
 
 const Compare = () => {
-    const [rowData, setRowData] = useState([]);
-    const [viewMoreFlag, setViewMoreFlag] = useState(false)
+    const classes = useStyles();
+    const [rows, setRowData] = useState([]);
+    const [viewMoreFlag, setViewMoreFlag] = useState(false);
+
+
+
 
     useEffect(() => {
-        fetch("https://api.transferwise.com/v3/comparisons/?sourceCurrency=EUR&targetCurrency=INR&sendAmount=1000")
+        fetch("https://api.transferwise.com/v3/comparisons/?sourceCurrency=EUR&targetCurrency=INR&sendAmount=100")
             .then(res => res.json())
             .then(
                 (result) => {
@@ -21,77 +228,34 @@ const Compare = () => {
             )
     }, []);
 
-    const Expand = (props) => {
-        return (<div>
-            Hello
-        </div>)
-    }
-    const viewMore = (props) => {
-        console.log('Clicked')
-        setViewMoreFlag(true);
-    }
-    const ChartView = () => {
-        return (<div>
-            Hello World why
-        </div>)
-    }
-
-    const ResultBox = (props) => {
-        return (<div className="container convert-result-box">
-            <Row>
-                <Col>
-                    <img src={props.data.logo} />
-                </Col>
-                <Col>
-                    {props.data.name}
-                </Col>
-                <Col>
-                    {props.data.quotes[0].rate}
-                </Col>
-                <Col>
-                    {props.data.quotes[0].fee} EUR
-                </Col>
-                <Col>
-                    {props.data.quotes[0].receivedAmount}
-                </Col>
-                <Col>
-                    <Button onClick={viewMore}>view more</Button>
-                </Col>
-            </Row>
-            {viewMoreFlag ? <ChartView /> : ''}
-            <hr></hr>
-
-        </div>
-        )
-    }
-    
-
-    return (<div>
-        <div className="container">
-            <Row className="header-line">
-                <Col>
-                    Logo
-                </Col>
-                <Col>
-                    Name
-                </Col>
-                <Col>
-                    Exchange Rates
-                </Col>
-                <Col>
-                    Transfer Fees
-                </Col>
-                <Col>
-                    Recieved Amount
-                </Col>
-
-            </Row>
-
-        </div>
-        {rowData.length == 0 ? <div>No Result Found</div> : rowData.map(x => <ResultBox data={x} />)}
 
 
-    </div>)
+    return (
+        <Paper className={classes.root}>
+            <TableContainer className={[classes.container, classes.table].join(' ')}>
+                <Table stickyHeader aria-label="collapsible table">
+                    <TableHead>
+                        <TableRow>
+                            {columns.map((column) => (
+                                <StyledTableCell
+                                    key={column.id}
+                                    align={column.align}
+                                    style={{ minWidth: column.minWidth }}
+                                >
+                                    {column.label}
+                                </StyledTableCell>
+                            ))}
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {rows.map((row) => (
+                            <Row key={row.name} row={row} />
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </Paper>
+    )
 }
 
 export default Compare;
