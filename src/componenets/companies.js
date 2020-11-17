@@ -1,7 +1,5 @@
-import React, { useState, useRef } from "react";
-import "./Companies.css";
-import Chevron from "./Chevron";
-import ReactBootstrap from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { AgGridColumn, AgGridReact } from 'ag-grid-react';
 
 function Companies(props) {
   const [setActive, setActiveState] = useState("");
@@ -10,34 +8,39 @@ function Companies(props) {
 
   const content = useRef(null);
 
-  function toggleAccordion() {
-    setActiveState(setActive === "" ? "active" : "");
-    setHeightState(
-      setActive === "active" ? "0px" : `${content.current.scrollHeight}px`
-    );
-    setRotateState(
-      setActive === "active" ? "accordion__icon" : "accordion__icon rotate"
-    );
-  }
+const Companies = () => {
+  const [gridApi, setGridApi] = useState(null);
+  const [gridColumnApi, setGridColumnApi] = useState(null);
+
+  const [rowData, setRowData] = useState([]);
+
+  useEffect(() => {
+    fetch("https://api.transferwise.com/v3/comparisons/?sourceCurrency=EUR&targetCurrency=INR&sendAmount=1000")
+      .then(res => res.json())
+      .then(
+        (result) => {
+          setRowData(result.providers)
+        },
+        (error) => {
+          console.log(error);
+        }
+      )
+  }, [])
+  
 
   return (
-    <div className="accordion__section">
-      <button className={`accordion ${setActive}`} onClick={toggleAccordion}>
-        <p className="accordion__title">{props.title}</p>
-        <Chevron className={`${setRotate}`} width={10} fill={"#192A56"} />
-      </button>
-      <div
-        ref={content}
-        style={{ maxHeight: `${setHeight}` }}
-        className="accordion__content"
-      >
-        <div
-          className="accordion__text"
-          dangerouslySetInnerHTML={{ __html: props.content }}
-        />
-      </div>
+    <div className="ag-theme-alpine-dark" style={{ height: 400, width: 1000 }}>
+      <AgGridReact
+        rowData={rowData}>
+        <AgGridColumn field="recievedTime" sortable={true} filter={true} ></AgGridColumn>
+        <AgGridColumn field="name" sortable={true} filter={true} ></AgGridColumn>
+        <AgGridColumn field="exchangeRate" sortable={true} filter={true} ></AgGridColumn>
+        <AgGridColumn field="transferRate" sortable={true} filter={true} ></AgGridColumn>
+        <AgGridColumn field="transferFee" sortable={true} filter={true} ></AgGridColumn>
+        <AgGridColumn field="priceRecieve" sortable={true} filter={true} ></AgGridColumn>
+      </AgGridReact>
     </div>
   );
 }
-
+}
  export default Companies;
