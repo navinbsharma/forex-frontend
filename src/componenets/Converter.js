@@ -5,22 +5,18 @@ import { apiUrls } from "../services/apiURLS";
 import { BsArrowLeftRight } from "react-icons/bs";
 
 function Converter() {
-    const [amountState, setAmountState] = useState({
-        amount: '',
-        errorAmount: '',
-        errorAmountMessage: '',
-    });
+    const [amount, setAmountState] = useState(1000);
 
     const [flag, setFlagState] = useState(false);
 
     // const [error, setError] = useState(null);
     // const [isLoaded, setIsLoaded] = useState(false);
     // const [currencyCountryData, setCurrencyCountryDataState] = useState('');
-    const [fromCurrencyState, setFromCurrencyState] = useState('AFN');
-    const [toCurrencyState, setToCurrencyState] = useState('AFN');
+    const [fromCurrencyState, setFromCurrencyState] = useState('AED');
+    const [toCurrencyState, setToCurrencyState] = useState('AED');
     const [resultCurrency, setResultCurrencyState] = useState(0);
-    const [resultFromCurrency, setResultFromCurrencyState] = useState('AFN');
-    const [resultToCurrency, setResultToCurrencyState] = useState('AFN');
+    const [resultFromCurrency, setResultFromCurrencyState] = useState('AED');
+    const [resultToCurrency, setResultToCurrencyState] = useState('AED');
 
 
     const symbols = {
@@ -201,9 +197,9 @@ function Converter() {
         const { name, value } = target;
         if (name === 'amount') {
             if (value.length <= 0) {
-                setAmountState(() => ({ amount: value, errorAmountMessage: 'PLease give some amount', errorAmount: true, }))
+                setAmountState(value)
             } else {
-                setAmountState(defaultValue => ({ ...defaultValue, amount: value, errorAmount: false }));
+                setAmountState(value);
             }
         }
         if (name === 'fromCurrency') {
@@ -215,8 +211,6 @@ function Converter() {
     }
 
     const handleSubmit = (e) => {
-        e.preventDefault();
-        let { amount, errorAmount, errorAmountMessage } = amountState;
         e.preventDefault();
         if (amount.length > 0) {
             let currencyFromTo = fromCurrencyState + '_' + toCurrencyState;
@@ -240,11 +234,11 @@ function Converter() {
 
     const OutputResult = () => {
         return (<div>
-            <Card className="convert-result-box">
+            <Card className="result-box">
                 <Card.Title>Result</Card.Title>
                 <Card.Body>
                     1 {resultFromCurrency} = {resultCurrency} {toCurrencyState}<br />
-                    {amountState.amount} {resultFromCurrency} = {resultCurrency * amountState.amount} {toCurrencyState}
+                    {amount} {resultFromCurrency} = {resultCurrency * amount} {toCurrencyState}
                 </Card.Body>
             </Card>
         </div >)
@@ -266,7 +260,7 @@ function Converter() {
                         <Col xs={12} md={3}>
                             <Form.Group controlId="formBasicEmail">
                                 <Form.Label>Amount</Form.Label>
-                                <Form.Control type="number" placeholder="Amount" name="amount" value={amountState.amount} onChange={handleChange} />
+                                <Form.Control type="number" placeholder="Amount" name="amount" value={amount} onChange={handleChange} />
                             </Form.Group>
                         </Col>
                         <Col xs={6} md={3}>

@@ -4,9 +4,10 @@ import Navbar from './componenets/navbar';
 import Converter from './componenets/Converter';
 import CompanySearchData from "./componenets/CompanySearchData";
 import Companies from './componenets/Companies';
-import LineChart from './componenets/LineChart';
+import Footer from './componenets/Footer'
 import './App.css';
 import '../node_modules/bootstrap/dist/css/bootstrap.css';
+import Compare from './componenets/Compare';
 
 function App() {
   return (
@@ -16,10 +17,9 @@ function App() {
         <Converter />
       </div>
       <div>
-        <Companies />
-         
+        <Compare />    
       </div>
-      
+      <Footer/>
     </div>
   );
 }
