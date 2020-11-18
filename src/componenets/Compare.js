@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from 'react';
-
-
-
 import Grid from '@material-ui/core/Grid';
 import Chart from 'chart.js';
-
-
 import PropTypes from 'prop-types';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
@@ -62,7 +57,6 @@ const StyledTableRow = withStyles((theme) => ({
     },
 }))(TableRow);
 
-
 const columns = [
     { id: 'logo', label: 'Company Logo', minWidth: 170, align: 'center' },
     { id: 'name', label: 'Name', minWidth: 100, align: 'center', },
@@ -96,13 +90,10 @@ const columns = [
     },
 ];
 
-
-
 function Row(props) {
     const { row } = props;
     const classes = useRowStyles();
     const [open, setOpen] = React.useState(false);
-
 
     return (
         <React.Fragment>
@@ -167,56 +158,20 @@ function Row(props) {
                     </Collapse>
                 </TableCell>
             </TableRow>
-            <TableRow>
-                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-                    <Collapse in={open} timeout="auto" unmountOnExit>
-                        <Box margin={1}>
-                            <Typography variant="h6" gutterBottom component="div">
-                                History
-                </Typography>
-                            <Table size="small" aria-label="purchases">
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>Date</TableCell>
-                                        <TableCell>Customer</TableCell>
-                                        <TableCell align="center">Amount</TableCell>
-                                        <TableCell align="center">Total price ($)</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                {/* <TableBody>
-                                    {row.history.map((historyRow) => (
-                                        <TableRow key={historyRow.date}>
-                                        <TableCell component="th" scope="row">
-                                        {historyRow.date}
-                                        </TableCell>
-                                        <TableCell>{historyRow.customerId}</TableCell>
-                                        <TableCell align="right">{historyRow.amount}</TableCell>
-                                        <TableCell align="right">
-                                        {Math.round(historyRow.amount * row.price * 100) / 100}
-                                        </TableCell>
-                                        </TableRow>
-                                        ))}
-                                    </TableBody>  */}
-                            </Table>
-                        </Box>
-                    </Collapse>
-                </TableCell>
-            </TableRow>
         </React.Fragment>
     );
 }
 
-
-const Compare = () => {
+const Compare = (props) => {
+    const amount = props.amount;
+    const fromCurrency = props.fromCurrency;
+    const toCurrency = props.toCurrency;
     const classes = useStyles();
     const [rows, setRowData] = useState([]);
     const [viewMoreFlag, setViewMoreFlag] = useState(false);
 
-
-
-
     useEffect(() => {
-        fetch("https://api.transferwise.com/v3/comparisons/?sourceCurrency=EUR&targetCurrency=INR&sendAmount=100")
+        fetch(`https://api.transferwise.com/v3/comparisons/?sourceCurrency=${fromCurrency}&targetCurrency=${toCurrency}&sendAmount=${amount}`)
             .then(res => res.json())
             .then(
                 (result) => {
@@ -228,8 +183,6 @@ const Compare = () => {
             )
     }, []);
 
-
-
     return (
         <Paper className={classes.root}>
             <TableContainer className={[classes.container, classes.table].join(' ')}>
@@ -240,8 +193,7 @@ const Compare = () => {
                                 <StyledTableCell
                                     key={column.id}
                                     align={column.align}
-                                    style={{ minWidth: column.minWidth }}
-                                >
+                                    style={{ minWidth: column.minWidth }} >
                                     {column.label}
                                 </StyledTableCell>
                             ))}

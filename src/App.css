@@ -32,9 +32,9 @@ body{
 
 
 /* CURRENCY CONVERTER RESULT BOX */
-.convert-result-box{
+.result-box{
     text-align: center;
-    margin-top: 2rem;
+    margin-top: 0rem;
     background-color: #393e46 !important;    
 }
 .ag-theme-alpine-dark{
