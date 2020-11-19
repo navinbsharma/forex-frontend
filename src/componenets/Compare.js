@@ -28,6 +28,10 @@ import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 
+import { apiUrls } from '../services/apiURLS';
+import { getAjaxDataCall } from '../services/AjaxCall';
+
+
 const useRowStyles = makeStyles({
     root: {
         width: '100%',
@@ -114,7 +118,7 @@ const columns = [
     { id: 'exchange', label: 'Exchange Rate', minWidth: 170, align: 'center', format: (value) => value.toFixed(2) },
     { id: 'fee', label: 'Fees', minWidth: 170, align: 'center', format: (value) => value.toFixed(2) },
     { id: 'recei vedAmount', label: "You'll Receive", minWidth: 170, align: 'center', format: (value) => value.toFixed(2) },
-    { id: 'viewMore', label: "Graph $ Charts", minWidth: 170, align: 'center' },
+    { id: 'viewMore', label: "Graph & Charts", minWidth: 170, align: 'center' },
 ];
 
 function EnhancedTableHead(props) {
@@ -234,18 +238,73 @@ EnhancedTableToolbar.propTypes = {
 function Row(props) {
     console.log(props)
     const { row } = props;
+    const { index } = props;
     const classes = useRowStyles();
     const [open, setOpen] = React.useState(false);
+    const [order, setOrder] = React.useState('asc');
+    const [orderBy, setOrderBy] = React.useState('calories');
+    const [selected, setSelected] = React.useState([]);
+
+
+    const handleRequestSort = (event, property) => {
+        console.log(property);
+        const isAsc = orderBy === property && order === 'asc';
+        setOrder(isAsc ? 'desc' : 'asc');
+        setOrderBy(property);
+    };
+
+    const handleClick = (event, name) => {
+        console.log(name)
+        const selectedIndex = selected.indexOf(name);
+        let newSelected = [];
+
+        if (selectedIndex === -1) {
+            newSelected = newSelected.concat(selected, name);
+        } else if (selectedIndex === 0) {
+            newSelected = newSelected.concat(selected.slice(1));
+        } else if (selectedIndex === selected.length - 1) {
+            newSelected = newSelected.concat(selected.slice(0, -1));
+        } else if (selectedIndex > 0) {
+            newSelected = newSelected.concat(
+                selected.slice(0, selectedIndex),
+                selected.slice(selectedIndex + 1),
+            );
+        }
+
+        setSelected(newSelected);
+    };
+
+
+
+    const isSelected = (name) => selected.indexOf(name) !== -1;
+    const isItemSelected = isSelected(row.name);
+    const labelId = `enhanced-table-checkbox-${index}`;
+
+
 
     return (
         <React.Fragment>
-            <StyledTableRow className={classes.root}>
+            <StyledTableRow
+                className={classes.root}
+                hover
+                onClick={(event) => handleClick(event, row.name)}
+                role="checkbox"
+                aria-checked={isItemSelected}
+                tabIndex={-1}
+                key={row.name}
+                selected={isItemSelected}>
+                <StyledTableCell padding="checkbox">
+                    <Checkbox
+                        checked={isItemSelected}
+                        inputProps={{ 'aria-labelledby': labelId }}
+                    />
+                </StyledTableCell>
 
                 <StyledTableCell align="center" >
-                    <img src={row[0].logo} style={{ height: 50, width: 50 }} />
+                    <img src={row.logo} style={{ height: 60, width: 100 }} />
                 </StyledTableCell>
                 <StyledTableCell align="center">{row.name}</StyledTableCell>
-                <StyledTableCell align="center">{row.rate}</StyledTableCell>
+                <StyledTableCell align="center">{row.exchange}</StyledTableCell>
                 <StyledTableCell align="center">{row.fee}</StyledTableCell>
                 <StyledTableCell align="center">{row.receivedAmount}</StyledTableCell>
                 <StyledTableCell align="center">
@@ -293,18 +352,69 @@ function Row(props) {
 }
 
 const Compare = (props) => {
-    const amount = props.amount;
-    const fromCurrency = props.fromCurrency;
-    const toCurrency = props.toCurrency;
-    const classes = useStyles();
+    const { amount, fromCurrency, toCurrency } = props;
     const [rows, setRowData] = useState([]);
-    const [viewMoreFlag, setViewMoreFlag] = useState(false);
+
+    const [resultFetch, setResultFetch] = useState(false);
+    useEffect(() => {
+        console.log(amount + " " + fromCurrency + " " + toCurrency);
+
+        if (amount > 0) {
+            let apiAuth = apiUrls.compareCommany;
+            const reqBody = {
+                sourceCurrency: fromCurrency,
+                targetCurrency: toCurrency,
+                sendAmount: amount
+            }
+            getAjaxDataCall(apiAuth, reqBody, callback => {
+                if (Object.keys(callback.data).length !== 0) {
+                    if ("errors" in callback.data) {
+                        setResultFetch(false);
+                    }
+                    else if (callback.data.providers.length == 0) {
+                        setResultFetch(false);
+                    } else {
+                        console.clear();
+                        console.log(callback.data);
+                        setResultFetch(true);
+                        const temp = [];
+                        temp.push(callback.data.providers.map(row => {
+                            return {
+                                'logo': row.logo,
+                                'name': row.name,
+                                'exchange': row.quotes[0].rate,
+                                'fee': row.quotes[0].fee,
+                                'receivedAmount': row.quotes[0].receivedAmount,
+                            }
+                        }));
+                        setRowData(temp[0])
+                    }
+                } else {
+
+                }
+            });
+        }
+    }, [amount, toCurrency, fromCurrency]);
+
+    return (
+        resultFetch ? <TableView data={props} rows={rows} /> : <div><h1>Sorry No Data Found</h1></div>
+    )
+}
+
+const ErrorView = () => {
+    return(<div>
+        <h1 style={{color:'#000000'}}>Sorry No Data Found</h1>
+    </div>)
+}
+
+const TableView = (props) => {
+    const classes = useStyles();
+    const rows = props.rows;
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
     const [selected, setSelected] = React.useState([]);
-    const [page, setPage] = React.useState(0);
-    const [dense, setDense] = React.useState(false);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+
 
     const handleRequestSort = (event, property) => {
         console.log(property);
@@ -343,53 +453,24 @@ const Compare = (props) => {
         setSelected(newSelected);
     };
 
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
 
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0);
-    };
-
-    const handleChangeDense = (event) => {
-        setDense(event.target.checked);
-    };
 
     const isSelected = (name) => selected.indexOf(name) !== -1;
-
-    const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
-
-    useEffect(() => {
-        fetch(`https://api.transferwise.com/v3/comparisons/?sourceCurrency=${fromCurrency}&targetCurrency=${toCurrency}&sendAmount=${amount}`)
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    console.log(result.providers)
-                    const temp = [];
-                    temp.push(result.providers.map(row => {
-                        return {
-                            'logo': row.logo,
-                            'name': row.name,
-                            'exchange': row.quotes[0].rate,
-                            'fee': row.quotes[0].fee,
-                            'receivedAmount': row.quotes[0].receivedAmount,
-                        }
-                    }));
-                    setRowData(temp[0])
-                },
-                (error) => {
-                    console.log(error);
-                }
-            )
-    }, []);
 
     return (
         <div className={classes.root}>
             <Paper className={classes.paper}>
                 <TableContainer className={[classes.container, classes.table].join(' ')}>
-                    <Table stickyHeader aria-label="collapsible table" aria-labelledby="tableTitle" size={dense ? 'small' : 'medium'} aria-label="enhanced table">
-                        <TableHead>
+                    <Table stickyHeader aria-label="collapsible table" aria-labelledby="tableTitle" aria-label="enhanced table">
+                        <EnhancedTableHead
+                            classes={classes}
+                            numSelected={selected.length}
+                            order={order}
+                            orderBy={orderBy}
+                            onSelectAllClick={handleSelectAllClick}
+                            onRequestSort={handleRequestSort}
+                            rowCount={rows.length}
+                        >
                             <TableRow>
                                 {columns.map((column) => (
                                     <StyledTableCell
@@ -401,78 +482,22 @@ const Compare = (props) => {
                                     </StyledTableCell>
                                 ))}
                             </TableRow>
-                        </TableHead>
-                        <EnhancedTableHead
-                            classes={classes}
-                            numSelected={selected.length}
-                            order={order}
-                            orderBy={orderBy}
-                            onSelectAllClick={handleSelectAllClick}
-                            onRequestSort={handleRequestSort}
-                            rowCount={rows.length}
-                        />
-                        <TableBody>
-                            {rows.map((row) => {
-                                <Row key={row.name} row={row} />
-                            })}
-                        </TableBody>
-                        <TableBody>
-                            {stableSort(rows, getComparator(order, orderBy))
-                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map((row, index) => {
-                                    const isItemSelected = isSelected(row.name);
-                                    const labelId = `enhanced-table-checkbox-${index}`;
+                        </EnhancedTableHead>
 
-                                    return (
-                                        <TableRow
-                                            hover
-                                            onClick={(event) => handleClick(event, row.name)}
-                                            role="checkbox"
-                                            aria-checked={isItemSelected}
-                                            tabIndex={-1}
-                                            key={row.name}
-                                            selected={isItemSelected}
-                                        >
-                                            <TableCell padding="checkbox">
-                                                <Checkbox
-                                                    checked={isItemSelected}
-                                                    inputProps={{ 'aria-labelledby': labelId }}
-                                                />
-                                            </TableCell>
-                                            <TableCell component="th" id={labelId} scope="row" padding="none">
-                                                <img src={row.logo} width="100" heigth="100" />
-                                            </TableCell>
-                                            <TableCell align="center">{row.name}</TableCell>
-                                            <TableCell align="center">{row.exchange}</TableCell>
-                                            <TableCell align="center">{row.fee}</TableCell>
-                                            <TableCell align="center">{row.receivedAmount}</TableCell>
-                                        </TableRow>
-                                    );
-                                })}
-                            {emptyRows > 0 && (
-                                <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
-                                    <TableCell colSpan={6} />
-                                </TableRow>
-                            )}
+                        <TableBody>
+                            {
+                                stableSort(rows, getComparator(order, orderBy))
+                                    .map((row, index) => {
+                                        console.log(row)
+                                        return <Row key={row.name} row={row} index={index} />
+                                    })}
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <TablePagination
-                    rowsPerPageOptions={[5, 10, 25]}
-                    component="div"
-                    count={rows.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onChangePage={handleChangePage}
-                    onChangeRowsPerPage={handleChangeRowsPerPage}
-                />
             </Paper>
-            <FormControlLabel
-                control={<Switch checked={dense} onChange={handleChangeDense} />}
-                label="Dense padding"
-            />
         </div>
     )
+
 }
 
 export default Compare;

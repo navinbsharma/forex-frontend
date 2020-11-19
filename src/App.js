@@ -28,8 +28,10 @@ function App() {
           toCurrency = {toCurrency}
           amount ={amount}
         />    
+      </div><div>
+        {/* <Footer/> */}
+
       </div>
-      <Footer/>
     </div>
   );
 }
