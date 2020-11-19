@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Chart from 'chart.js';
@@ -294,8 +292,10 @@ function Row(props) {
     );
 }
 
-
-const Compare = () => {
+const Compare = (props) => {
+    const amount = props.amount;
+    const fromCurrency = props.fromCurrency;
+    const toCurrency = props.toCurrency;
     const classes = useStyles();
     const [rows, setRowData] = useState([]);
     const [viewMoreFlag, setViewMoreFlag] = useState(false);
@@ -361,7 +361,7 @@ const Compare = () => {
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
     useEffect(() => {
-        fetch("https://api.transferwise.com/v3/comparisons/?sourceCurrency=EUR&targetCurrency=INR&sendAmount=100")
+        fetch(`https://api.transferwise.com/v3/comparisons/?sourceCurrency=${fromCurrency}&targetCurrency=${toCurrency}&sendAmount=${amount}`)
             .then(res => res.json())
             .then(
                 (result) => {
@@ -383,8 +383,6 @@ const Compare = () => {
                 }
             )
     }, []);
-
-
 
     return (
         <div className={classes.root}>

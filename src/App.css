@@ -30,49 +30,17 @@ body{
 }
 
 
+
 /* CURRENCY CONVERTER RESULT BOX */
-.convert-result-box{
-    text-align: center;
-    background-color: #f6f5f5 !important; 
-    color: #393e46;   
-    font-size: medium;
-    text-shadow: #1a1a2e !important;
-}
 .result-box{
     text-align: center;
-    background-color: #393e46 !important; 
-    color: #f6f5f5;   
-    font-size: medium;
-    text-shadow: #1a1a2e !important;
+    margin-top: 0rem;
+    background-color: #393e46 !important;    
 }
 .ag-theme-alpine-dark{
     margin: auto;
     width: 50%;
     padding: 10px;
-    height: 100%;
-    width:100%;    
-    background-color: #f6f5f5 !important;;
-}
-
-/* RESULT AREA */
-.compare{
-    background-color: #E5E5E5;
-    
-}
-.header-line{
-    background-color: #393e46 !important;
-    text-align: center;
-    padding: 2%;
-    margin: 2%;
-    font-size: medium;
-    border-radius: 5%;
-}
-
-
-/* FOOTER */
-.footer{
-    background-color: #393e46 !important;
-    text-align: center;
-    padding:2% 0 3% ;
-    margin:auto ;
+    height: 400;
+    width: 600;
 }

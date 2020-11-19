@@ -4,20 +4,14 @@ import { getAjaxCall } from '../services/AjaxCall';
 import { apiUrls } from "../services/apiURLS";
 import { BsArrowLeftRight } from "react-icons/bs";
 
-function Converter() {
-    const [amount, setAmountState] = useState(1000);
-
+function Converter(props) {
+    const [amount, setAmountState] = useState('');
     const [flag, setFlagState] = useState(false);
-
-    // const [error, setError] = useState(null);
-    // const [isLoaded, setIsLoaded] = useState(false);
-    // const [currencyCountryData, setCurrencyCountryDataState] = useState('');
     const [fromCurrencyState, setFromCurrencyState] = useState('AED');
     const [toCurrencyState, setToCurrencyState] = useState('AED');
-    const [resultCurrency, setResultCurrencyState] = useState(0);
+    const [resultCurrency, setResultCurrencyState] = useState();
     const [resultFromCurrency, setResultFromCurrencyState] = useState('AED');
     const [resultToCurrency, setResultToCurrencyState] = useState('AED');
-
 
     const symbols = {
         "AED": "United Arab Emirates Dirham",
@@ -195,12 +189,9 @@ function Converter() {
 
     const handleChange = ({ target }) => {
         const { name, value } = target;
+     
         if (name === 'amount') {
-            if (value.length <= 0) {
                 setAmountState(value)
-            } else {
-                setAmountState(value);
-            }
         }
         if (name === 'fromCurrency') {
             setFromCurrencyState(value);
@@ -208,10 +199,12 @@ function Converter() {
         if (name === 'toCurrency') {
             setToCurrencyState(value);
         }
+        
     }
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const handleSubmit = () => {
+       
+        console.log(amount);
         if (amount.length > 0) {
             let currencyFromTo = fromCurrencyState + '_' + toCurrencyState;
             let apiAuth = apiUrls.convertMoney;
@@ -225,6 +218,10 @@ function Converter() {
                     setFlagState(true);
                     setResultCurrencyState(callback.data[Object.keys(callback.data)]);
                     setResultFromCurrencyState(fromCurrencyState);
+                    setResultToCurrencyState(toCurrencyState);
+                    props.getfromcurrency(fromCurrencyState);
+                    props.gettocurrency(toCurrencyState);
+                    props.getamount(amount);
                 } else {
 
                 }
@@ -237,25 +234,21 @@ function Converter() {
             <Card className="result-box">
                 <Card.Title>Result</Card.Title>
                 <Card.Body>
-                    1 {resultFromCurrency} = {resultCurrency} {toCurrencyState}<br />
-                    {amount} {resultFromCurrency} = {resultCurrency * amount} {toCurrencyState}
+                    1 {resultFromCurrency} = {resultCurrency} {resultToCurrency}<br />
+                    {amount} {resultFromCurrency} = {resultCurrency * amount} {resultToCurrency}
                 </Card.Body>
             </Card>
         </div >)
     }
 
-    const handleReverse = (e) => {
+    const handleReverse  = ({ target }) => {
         const temp = toCurrencyState
-        
         document.getElementsByName('toCurrency')[0].value = fromCurrencyState;
         document.getElementsByName('fromCurrency')[0].value = temp;
         setToCurrencyState(fromCurrencyState);
         setFromCurrencyState(temp);
-
+        handleSubmit();
     }
-
-
-
 
     return (<div className="m-3 p-4">
         <Card className="currency-converter">
@@ -276,15 +269,17 @@ function Converter() {
                             </Form.Group>
                         </Col>
                         <Col xs={12} md={1} className="currency-converter">
-                            <Button onClick={handleReverse}><BsArrowLeftRight /></Button>
+                            <br/>
+                            <Button  onClick={handleReverse}><BsArrowLeftRight /></Button>
                         </Col>
                         <Col xs={6} md={3}>
                             <Form.Group controlId="formBasicEmail">
                                 <Form.Label>To</Form.Label>
-                                <Form.Control name="toCurrency" as="select" onChange={handleChange}>{Object.keys(symbols).map((code) => MakeItem(code, symbols[code]))}</Form.Control>
+                                <Form.Control name="toCurrency" as="select" onChange={handleChange} >{Object.keys(symbols).map((code) => MakeItem(code, symbols[code]))}</Form.Control>
                             </Form.Group>
                         </Col>
                         <Col xs={12} md={2}>
+                        <br/>
                             <Button variant="primary" onClick={handleSubmit}>Go</Button>
                         </Col>
                     </Row>
@@ -292,13 +287,8 @@ function Converter() {
             </Card.Body>
         </Card>
         { flag && <OutputResult />}
-
-
-
     </div>)
 
 }
 
 export default Converter;
-
-
