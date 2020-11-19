@@ -245,7 +245,13 @@ function Converter() {
     }
 
     const handleReverse = (e) => {
-        console.log(document.getElementsByName('toCurrency').value);
+        const temp = toCurrencyState
+        
+        document.getElementsByName('toCurrency')[0].value = fromCurrencyState;
+        document.getElementsByName('fromCurrency')[0].value = temp;
+        setToCurrencyState(fromCurrencyState);
+        setFromCurrencyState(temp);
+
     }
 
 

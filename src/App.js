@@ -2,8 +2,6 @@ import './App.css';
 import './componenets/navbar'
 import Navbar from './componenets/navbar';
 import Converter from './componenets/Converter';
-import CompanySearchData from "./componenets/CompanySearchData";
-import Companies from './componenets/Companies';
 import Footer from './componenets/Footer'
 import './App.css';
 import '../node_modules/bootstrap/dist/css/bootstrap.css';
