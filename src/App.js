@@ -4,6 +4,7 @@ import Navbar from './componenets/navbar';
 import Converter from './componenets/Converter';
 import Footer from './componenets/Footer'
 import './App.css';
+import HomePage from './componenets/HomePage';
 import '../node_modules/bootstrap/dist/css/bootstrap.css';
 import Compare from './componenets/Compare';
 import { useState } from 'react';
@@ -21,13 +22,15 @@ function App() {
           gettocurrency = {(val)=>{setToCurrencyState(val)}}
           getamount = {(val)=>{setAmountState(val)}}
         />
+        <HomePage/>  
       </div>
       <div>
         <Compare 
           fromCurrency = {fromCurrency}
           toCurrency = {toCurrency}
           amount ={amount}
-        />    
+        />  
+        
       </div><div>
         {/*<Footer/> */}
 

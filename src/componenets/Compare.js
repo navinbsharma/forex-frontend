@@ -27,10 +27,10 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
-
+import ErrorPage from './ErrorPage';
+import HomePage from './HomePage';
 import { apiUrls } from '../services/apiURLS';
 import { getAjaxDataCall } from '../services/AjaxCall';
-
 
 const useRowStyles = makeStyles({
     root: {
@@ -110,7 +110,6 @@ function stableSort(array, comparator) {
     });
     return stabilizedThis.map((el) => el[0]);
 }
-
 
 const columns = [
     { id: 'logo', label: 'Company Logo', minWidth: 170, align: 'center' },
@@ -244,8 +243,6 @@ function Row(props) {
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
     const [selected, setSelected] = React.useState([]);
-
-
     const handleRequestSort = (event, property) => {
         console.log(property);
         const isAsc = orderBy === property && order === 'asc';
@@ -273,14 +270,9 @@ function Row(props) {
 
         setSelected(newSelected);
     };
-
-
-
     const isSelected = (name) => selected.indexOf(name) !== -1;
     const isItemSelected = isSelected(row.name);
     const labelId = `enhanced-table-checkbox-${index}`;
-
-
 
     return (
         <React.Fragment>
@@ -299,7 +291,6 @@ function Row(props) {
                         inputProps={{ 'aria-labelledby': labelId }}
                     />
                 </StyledTableCell>
-
                 <StyledTableCell align="center" >
                     <img src={row.logo} style={{ height: 60, width: 100 }} />
                 </StyledTableCell>
@@ -397,13 +388,19 @@ const Compare = (props) => {
     }, [amount, toCurrency, fromCurrency]);
 
     return (
-        resultFetch ? <TableView data={props} rows={rows} /> : <div><h1>Sorry No Data Found</h1></div>
+        resultFetch ? <TableView data={props} rows={rows} /> : <ErrorView />
     )
 }
 
 const ErrorView = () => {
-    return(<div>
-        <h1 style={{color:'#000000'}}>Sorry No Data Found</h1>
+    return (<div>
+        <ErrorPage />
+    </div>)
+}
+
+const HomeView = () => {
+    return (<div>
+        <HomePage />
     </div>)
 }
 
@@ -413,8 +410,6 @@ const TableView = (props) => {
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
     const [selected, setSelected] = React.useState([]);
-
-
 
     const handleRequestSort = (event, property) => {
         console.log(property);
@@ -449,11 +444,8 @@ const TableView = (props) => {
                 selected.slice(selectedIndex + 1),
             );
         }
-
         setSelected(newSelected);
     };
-
-
 
     const isSelected = (name) => selected.indexOf(name) !== -1;
 
@@ -497,7 +489,5 @@ const TableView = (props) => {
             </Paper>
         </div>
     )
-
 }
-
 export default Compare;
