@@ -92,12 +92,12 @@ const columns = [
 
 function Row(props) {
     const { row } = props;
-    const classes = useRowStyles();
+    const classnamees = useRowStyles();
     const [open, setOpen] = React.useState(false);
 
     return (
         <React.Fragment>
-            <StyledTableRow className={classes.root}>
+            <StyledTableRow classnameName={classnamees.root}>
 
                 <StyledTableCell align="center" >
                     <img src={row.logo} style={{ height: 50, width: 50 }} />
@@ -119,10 +119,10 @@ function Row(props) {
                             <Typography variant="h6" gutterBottom component="div">
                                 Graphs $ Chart
                             </Typography>
-                            <div className={classes.root}>
+                            <div classnameName={classnamees.root}>
                                 <Grid container spacing={3}>
                                     <Grid item xs={6}>
-                                        <Paper className={classes.paper}>
+                                        <Paper classnameName={classnamees.paper}>
                                             <Table size="small" aria-label="purchases">
                                                 <TableHead>
                                                     <TableRow>
@@ -136,21 +136,21 @@ function Row(props) {
                                         </Paper>
                                     </Grid>
                                     <Grid item xs={6}>
-                                        <Paper className={classes.paper}>
+                                        <Paper classnameName={classnamees.paper}>
                                             <AllChart />
                                         </Paper>
                                     </Grid>
                                     <Grid item xs={3}>
-                                        <Paper className={classes.paper}>xs=3</Paper>
+                                        <Paper classnameName={classnamees.paper}>xs=3</Paper>
                                     </Grid>
                                     <Grid item xs={3}>
-                                        <Paper className={classes.paper}>xs=3</Paper>
+                                        <Paper classnameName={classnamees.paper}>xs=3</Paper>
                                     </Grid>
                                     <Grid item xs={3}>
-                                        <Paper className={classes.paper}>xs=3</Paper>
+                                        <Paper classnameName={classnamees.paper}>xs=3</Paper>
                                     </Grid>
                                     <Grid item xs={3}>
-                                        <Paper className={classes.paper}>xs=3</Paper>
+                                        <Paper classnameName={classnamees.paper}>xs=3</Paper>
                                     </Grid>
                                 </Grid>
                             </div>
@@ -166,12 +166,13 @@ const Compare = (props) => {
     const amount = props.amount;
     const fromCurrency = props.fromCurrency;
     const toCurrency = props.toCurrency;
-    const classes = useStyles();
+    const classnamees = useStyles();
     const [rows, setRowData] = useState([]);
     const [viewMoreFlag, setViewMoreFlag] = useState(false);
 
     useEffect(() => {
         fetch(`https://api.transferwise.com/v3/comparisons/?sourceCurrency=${fromCurrency}&targetCurrency=${toCurrency}&sendAmount=${amount}`)
+  
             .then(res => res.json())
             .then(
                 (result) => {
@@ -181,11 +182,11 @@ const Compare = (props) => {
                     console.log(error);
                 }
             )
-    }, []);
+    }, [amount,fromCurrency,toCurrency]);
 
     return (
-        <Paper className={classes.root}>
-            <TableContainer className={[classes.container, classes.table].join(' ')}>
+        <Paper classnameName={classnamees.root}>
+            <TableContainer classnameName={[classnamees.container, classnamees.table].join(' ')}>
                 <Table stickyHeader aria-label="collapsible table">
                     <TableHead>
                         <TableRow>
