@@ -1,4 +1,4 @@
-import './App.css';
+
 import './componenets/navbar'
 import Navbar from './componenets/navbar';
 import Converter from './componenets/Converter';
@@ -28,8 +28,10 @@ function App() {
           toCurrency = {toCurrency}
           amount ={amount}
         />    
+      </div><div>
+        {/*<Footer/> */}
+
       </div>
-      <Footer/>
     </div>
   );
 }

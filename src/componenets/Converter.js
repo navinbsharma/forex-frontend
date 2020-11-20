@@ -204,7 +204,6 @@ function Converter(props) {
 
     const handleSubmit = () => {
        
-        console.log(amount);
         if (amount.length > 0) {
             let currencyFromTo = fromCurrencyState + '_' + toCurrencyState;
             let apiAuth = apiUrls.convertMoney;
@@ -213,7 +212,6 @@ function Converter(props) {
                 q: currencyFromTo,
             }
             getAjaxCall(apiAuth, reqBody, callback => {
-                console.log(callback)
                 if (Object.keys(callback.data).length !== 0) {
                     setFlagState(true);
                     setResultCurrencyState(callback.data[Object.keys(callback.data)]);
@@ -241,13 +239,12 @@ function Converter(props) {
         </div >)
     }
 
-    const handleReverse  = ({ target }) => {
-        const temp = toCurrencyState
+    const handleReverse  = () => {
+        const temp = toCurrencyState;
         document.getElementsByName('toCurrency')[0].value = fromCurrencyState;
         document.getElementsByName('fromCurrency')[0].value = temp;
         setToCurrencyState(fromCurrencyState);
         setFromCurrencyState(temp);
-        handleSubmit();
     }
 
     return (<div classnameName="m-3 p-4">

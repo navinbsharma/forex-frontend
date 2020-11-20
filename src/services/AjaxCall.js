@@ -21,3 +21,26 @@ export function getAjaxCall(api, inputParamJSON, callbackFn) {
   });
 
 }
+
+export function getAjaxDataCall(api, inputParamJSON, callbackFn) {
+  console.log("HLO")
+  console.log(inputParamJSON)
+
+  const options = {
+    method: 'GET',
+    url: api,
+    params: inputParamJSON,
+  };
+
+  axios.request(options).then(function (response) {
+    if (callbackFn) {
+      callbackFn(response, null)
+    } else {
+      return response.data
+    }
+  }).catch(function (error) {
+    console.error(error);
+  });
+
+}
+
