@@ -4,7 +4,7 @@ export function getAjaxCall(api, inputParamJSON, callbackFn) {
   const options = {
     method: 'GET',
     url: api,
-    params: { q: inputParamJSON.q, compact: 'ultra', apiKey: '33fc73cc6d46c586fb5a' },
+    params: inputParamJSON,
   };
 
   axios.request(options).then(function (response) {
@@ -20,7 +20,6 @@ export function getAjaxCall(api, inputParamJSON, callbackFn) {
 }
 
 export function getAjaxDataCall(api, inputParamJSON, callbackFn) {
-  console.log("HLO")
   console.log(inputParamJSON)
 
   const options = {

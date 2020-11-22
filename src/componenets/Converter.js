@@ -203,13 +203,15 @@ function Converter(props) {
     }
 
     const handleSubmit = () => {
+
        
         if (amount.length > 0) {
             let currencyFromTo = fromCurrencyState + '_' + toCurrencyState;
             let apiAuth = apiUrls.convertMoney;
             const reqBody = {
-                amount,
                 q: currencyFromTo,
+                compact: 'ultra',
+                apiKey: '33fc73cc6d46c586fb5a'
             }
             getAjaxCall(apiAuth, reqBody, callback => {
                 if (Object.keys(callback.data).length !== 0) {
@@ -229,7 +231,7 @@ function Converter(props) {
 
     const OutputResult = () => {
         return (<div>
-            <Card className="result-box">
+            <Card classnameName="result-box">
                 <Card.Title>Result</Card.Title>
                 <Card.Body>
                     1 {resultFromCurrency} = {resultCurrency} {resultToCurrency}<br />
@@ -247,8 +249,8 @@ function Converter(props) {
         setFromCurrencyState(temp);
     }
 
-    return (<div className="m-3 p-4">
-        <Card className="currency-converter">
+    return (<div classnameName="m-3 p-4">
+        <Card classnameName="currency-converter">
             <Card.Body>
                 <Card.Title>FOREX AGGREGRATOR</Card.Title>
                 <Form onSubmit={handleSubmit}>
@@ -265,7 +267,7 @@ function Converter(props) {
                                 <Form.Control name="fromCurrency" as="select" onChange={handleChange}>{Object.keys(symbols).map((code) => MakeItem(code, symbols[code]))}</Form.Control>
                             </Form.Group>
                         </Col>
-                        <Col xs={12} md={1} className="currency-converter">
+                        <Col xs={12} md={1} classnameName="currency-converter">
                             <br/>
                             <Button  onClick={handleReverse}><BsArrowLeftRight /></Button>
                         </Col>

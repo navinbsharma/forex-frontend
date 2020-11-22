@@ -4,11 +4,12 @@ import { makeStyles, withStyles, lighten } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
+import ErrorPage from './ErrorPage';
+import HomePage from './HomePage';
 import { apiUrls } from '../services/apiURLS';
 import { getAjaxCall } from '../services/AjaxCall';
 import { TableCell, Tooltip, Checkbox, TableSortLabel, Toolbar, Paper, IconButton, Table, TableBody, TableContainer, TableHead, TableRow, Typography } from '@material-ui/core';
 import TransitionsModal from "./ModalDetails";
-
 
 const useRowStyles = makeStyles({
     root: {
@@ -240,7 +241,6 @@ const Row = (props) => {
 
         setSelected(newSelected);
     };
-
     const isSelected = (name) => selected.indexOf(name) !== -1;
     const isItemSelected = isSelected(row.name);
     const labelId = `enhanced-table-checkbox-${index}`;
@@ -279,7 +279,13 @@ const Row = (props) => {
 
 const ErrorView = () => {
     return (<div>
-        <h1 style={{ color: '#000000' }}>Sorry No Data Found</h1>
+        <ErrorPage />
+    </div>)
+}
+
+const HomeView = () => {
+    return (<div>
+        <HomePage />
     </div>)
 }
 
@@ -340,6 +346,7 @@ const TableView = (props) => {
 const Compare = (props) => {
     const { amount, fromCurrency, toCurrency } = props;
     const [rows, setRowData] = useState([]);
+    console.log(fromCurrency+" "+ toCurrency)
 
     const [resultFetch, setResultFetch] = useState(false);
     useEffect(() => {
@@ -351,6 +358,7 @@ const Compare = (props) => {
                 sendAmount: amount
             }
             getAjaxCall(apiAuth, reqBody, callback => {
+                console.log(callback.data)
                 if (Object.keys(callback.data).length !== 0) {
                     if ("errors" in callback.data) {
                         setResultFetch(false);
@@ -384,5 +392,4 @@ const Compare = (props) => {
         resultFetch ? <TableView data={props} rows={rows} fromCurrency={fromCurrency} toCurrency={toCurrency} amount={amount} /> : <ErrorView />
     )
 }
-
 export default Compare;
