@@ -72,11 +72,27 @@ body{
 /* Error Page */
 .error {
   font-family: 'Itim', cursive;
-  font-size: 90px;
+  font-size: 70px;
+  text-shadow: 2px 2px 3px rgb(255, 255, 255), 3px 3px 5px rgb(73, 71, 71);
+}
+
+.error-msg{
+  font-family: 'Itim', cursive;
+  font-size: 40px;
+  color: #ffff;
+  margin-top: 50px;
+  text-shadow: 2px 2px 3px rgb(255, 255, 255), 3px 3px 5px rgb(73, 71, 71);
+}
+
+.error-txt{
+  font-family: 'Itim', cursive;
+  font-size: 20px;
+  color : #ffffff;
+  margin-top: 20px;
 }
 
 .bg {
-  height: 500px;
+  height: 600px;
   background-image: linear-gradient(to right, #1a1a2e , #0f3460);
 }
 

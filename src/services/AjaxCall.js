@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 export function getAjaxCall(api, inputParamJSON, callbackFn) {
-  console.log("HLO")
   console.log(inputParamJSON)
 
   const options = {
@@ -23,7 +22,6 @@ export function getAjaxCall(api, inputParamJSON, callbackFn) {
 }
 
 export function getAjaxDataCall(api, inputParamJSON, callbackFn) {
-  console.log("HLO")
   console.log(inputParamJSON)
 
   const options = {
