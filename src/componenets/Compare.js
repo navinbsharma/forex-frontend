@@ -1,35 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import Grid from '@material-ui/core/Grid';
-import Chart from 'chart.js';
 import PropTypes from 'prop-types';
 import { makeStyles, withStyles, lighten } from '@material-ui/core/styles';
-import Box from '@material-ui/core/Box';
-import Collapse from '@material-ui/core/Collapse';
-import IconButton from '@material-ui/core/IconButton';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-import AllChart from './AllChart';
 import clsx from 'clsx';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
-import Toolbar from '@material-ui/core/Toolbar';
-import Checkbox from '@material-ui/core/Checkbox';
-import Tooltip from '@material-ui/core/Tooltip';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
-
 import { apiUrls } from '../services/apiURLS';
-import { getAjaxDataCall } from '../services/AjaxCall';
+import { getAjaxCall } from '../services/AjaxCall';
+import { TableCell, Tooltip, Checkbox, TableSortLabel, Toolbar, Paper, IconButton, Table, TableBody, TableContainer, TableHead, TableRow, Typography } from '@material-ui/core';
+import TransitionsModal from "./ModalDetails";
 
 
 const useRowStyles = makeStyles({
@@ -85,7 +63,7 @@ const StyledTableRow = withStyles((theme) => ({
     },
 }))(TableRow);
 
-function descendingComparator(a, b, orderBy) {
+const descendingComparator = (a, b, orderBy) => {
     if (b[orderBy] < a[orderBy]) {
         return -1;
     }
@@ -95,13 +73,13 @@ function descendingComparator(a, b, orderBy) {
     return 0;
 }
 
-function getComparator(order, orderBy) {
+const getComparator = (order, orderBy) => {
     return order === 'desc'
         ? (a, b) => descendingComparator(a, b, orderBy)
         : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-function stableSort(array, comparator) {
+const stableSort = (array, comparator) => {
     const stabilizedThis = array.map((el, index) => [el, index]);
     stabilizedThis.sort((a, b) => {
         const order = comparator(a[0], b[0]);
@@ -111,17 +89,16 @@ function stableSort(array, comparator) {
     return stabilizedThis.map((el) => el[0]);
 }
 
-
 const columns = [
     { id: 'logo', label: 'Company Logo', minWidth: 170, align: 'center' },
     { id: 'name', label: 'Name', minWidth: 100, align: 'center', },
     { id: 'exchange', label: 'Exchange Rate', minWidth: 170, align: 'center', format: (value) => value.toFixed(2) },
     { id: 'fee', label: 'Fees', minWidth: 170, align: 'center', format: (value) => value.toFixed(2) },
-    { id: 'recei vedAmount', label: "You'll Receive", minWidth: 170, align: 'center', format: (value) => value.toFixed(2) },
+    { id: 'receivedAmount', label: "You'll Receive", minWidth: 170, align: 'center', format: (value) => value.toFixed(2) },
     { id: 'viewMore', label: "Graph & Charts", minWidth: 170, align: 'center' },
 ];
 
-function EnhancedTableHead(props) {
+const EnhancedTableHead = (props) => {
     const { classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
@@ -235,23 +212,13 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-function Row(props) {
-    console.log(props)
+const Row = (props) => {
+    const { amount, fromCurrency, toCurrency } = props;
+    console.log(amount + " " + fromCurrency + "  " + toCurrency)
     const { row } = props;
     const { index } = props;
     const classes = useRowStyles();
-    const [open, setOpen] = React.useState(false);
-    const [order, setOrder] = React.useState('asc');
-    const [orderBy, setOrderBy] = React.useState('calories');
     const [selected, setSelected] = React.useState([]);
-
-
-    const handleRequestSort = (event, property) => {
-        console.log(property);
-        const isAsc = orderBy === property && order === 'asc';
-        setOrder(isAsc ? 'desc' : 'asc');
-        setOrderBy(property);
-    };
 
     const handleClick = (event, name) => {
         console.log(name)
@@ -274,19 +241,15 @@ function Row(props) {
         setSelected(newSelected);
     };
 
-
-
     const isSelected = (name) => selected.indexOf(name) !== -1;
     const isItemSelected = isSelected(row.name);
     const labelId = `enhanced-table-checkbox-${index}`;
-
-
 
     return (
         <React.Fragment>
             <StyledTableRow
                 className={classes.root}
-                hover
+                hov er
                 onClick={(event) => handleClick(event, row.name)}
                 role="checkbox"
                 aria-checked={isItemSelected}
@@ -299,56 +262,79 @@ function Row(props) {
                         inputProps={{ 'aria-labelledby': labelId }}
                     />
                 </StyledTableCell>
-
                 <StyledTableCell align="center" >
-                    <img src={row.logo} style={{ height: 60, width: 100 }} />
+                    <img src={row.logo} alt={row.name} style={{ height: 60, width: 100 }} />
                 </StyledTableCell>
                 <StyledTableCell align="center">{row.name}</StyledTableCell>
                 <StyledTableCell align="center">{row.exchange}</StyledTableCell>
                 <StyledTableCell align="center">{row.fee}</StyledTableCell>
                 <StyledTableCell align="center">{row.receivedAmount}</StyledTableCell>
                 <StyledTableCell align="center">
-                    <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
-                        {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                    </IconButton>
+                    <TransitionsModal data={props}/>
                 </StyledTableCell>
             </StyledTableRow>
-            <TableRow>
-                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-                    <Collapse in={open} timeout="auto" unmountOnExit>
-                        <Box margin={1}>
-                            <Typography variant="h6" gutterBottom component="div">
-                                Graphs & Chart
-                            </Typography>
-                            <div className={classes.root}>
-                                <Grid container spacing={3}>
-                                    <Grid item xs={6}>
-                                        <Paper className={classes.paper}>
-                                            <Table size="small" aria-label="purchases">
-                                                <TableHead>
-                                                    <TableRow>
-                                                        <TableCell>Date</TableCell>
-                                                        <TableCell>Customer</TableCell>
-                                                        <TableCell align="center">Amount</TableCell>
-                                                        <TableCell align="center">Total price ($)</TableCell>
-                                                    </TableRow>
-                                                </TableHead>
-                                            </Table>
-                                        </Paper>
-                                    </Grid>
-                                    <Grid item xs={6}>
-                                        <Paper className={classes.paper}>
-                                            <AllChart />
-                                        </Paper>
-                                    </Grid>
-                                </Grid>
-                            </div>
-                        </Box>
-                    </Collapse>
-                </TableCell>
-            </TableRow>
         </React.Fragment>
     );
+}
+
+const ErrorView = () => {
+    return (<div>
+        <h1 style={{ color: '#000000' }}>Sorry No Data Found</h1>
+    </div>)
+}
+
+const TableView = (props) => {
+    const { amount, fromCurrency, toCurrency } = props;
+    const classes = useStyles();
+    const rows = props.rows;
+    const [order, setOrder] = React.useState('asc');
+    const [orderBy, setOrderBy] = React.useState('name');
+    const [selected, setSelected] = React.useState([]);
+
+    const handleRequestSort = (event, property) => {
+        console.log(property);
+        const isAsc = orderBy === property && order === 'asc';
+        setOrder(isAsc ? 'desc' : 'asc');
+        setOrderBy(property);
+    };
+
+    const handleSelectAllClick = (event) => {
+        if (event.target.checked) {
+            const newSelecteds = rows.map((n) => n.name);
+            setSelected(newSelecteds);
+            return;
+        }
+        setSelected([]);
+    };
+
+    return (
+        <div className={classes.root}>
+            <Paper className={classes.paper}>
+                <TableContainer className={[classes.container, classes.table].join(' ')}>
+                    <Table stickyHeader aria-label="collapsible table" aria-labelledby="tableTitle" aria-label="enhanced table">
+                        <EnhancedTableHead
+                            classes={classes}
+                            numSelected={selected.length}
+                            order={order}
+                            orderBy={orderBy}
+                            onSelectAllClick={handleSelectAllClick}
+                            onRequestSort={handleRequestSort}
+                            rowCount={rows.length}
+                        />
+
+                        <TableBody>
+                            {
+                                stableSort(rows, getComparator(order, orderBy))
+                                    .map((row, index) => {
+                                        console.log(row)
+                                        return <Row key={row.name} row={row} index={index} amount={amount} fromCurrency={fromCurrency} toCurrency={toCurrency} />
+                                    })}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Paper>
+        </div>
+    )
 }
 
 const Compare = (props) => {
@@ -357,8 +343,6 @@ const Compare = (props) => {
 
     const [resultFetch, setResultFetch] = useState(false);
     useEffect(() => {
-        console.log(amount + " " + fromCurrency + " " + toCurrency);
-
         if (amount > 0) {
             let apiAuth = apiUrls.compareCommany;
             const reqBody = {
@@ -366,7 +350,7 @@ const Compare = (props) => {
                 targetCurrency: toCurrency,
                 sendAmount: amount
             }
-            getAjaxDataCall(apiAuth, reqBody, callback => {
+            getAjaxCall(apiAuth, reqBody, callback => {
                 if (Object.keys(callback.data).length !== 0) {
                     if ("errors" in callback.data) {
                         setResultFetch(false);
@@ -390,114 +374,15 @@ const Compare = (props) => {
                         setRowData(temp[0])
                     }
                 } else {
-
+                    setResultFetch(false);
                 }
             });
         }
     }, [amount, toCurrency, fromCurrency]);
 
     return (
-        resultFetch ? <TableView data={props} rows={rows} /> : <div><h1>Sorry No Data Found</h1></div>
+        resultFetch ? <TableView data={props} rows={rows} fromCurrency={fromCurrency} toCurrency={toCurrency} amount={amount} /> : <ErrorView />
     )
-}
-
-const ErrorView = () => {
-    return(<div>
-        <h1 style={{color:'#000000'}}>Sorry No Data Found</h1>
-    </div>)
-}
-
-const TableView = (props) => {
-    const classes = useStyles();
-    const rows = props.rows;
-    const [order, setOrder] = React.useState('asc');
-    const [orderBy, setOrderBy] = React.useState('calories');
-    const [selected, setSelected] = React.useState([]);
-
-
-
-    const handleRequestSort = (event, property) => {
-        console.log(property);
-        const isAsc = orderBy === property && order === 'asc';
-        setOrder(isAsc ? 'desc' : 'asc');
-        setOrderBy(property);
-    };
-
-    const handleSelectAllClick = (event) => {
-        if (event.target.checked) {
-            const newSelecteds = rows.map((n) => n.name);
-            setSelected(newSelecteds);
-            return;
-        }
-        setSelected([]);
-    };
-
-    const handleClick = (event, name) => {
-        console.log(name)
-        const selectedIndex = selected.indexOf(name);
-        let newSelected = [];
-
-        if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, name);
-        } else if (selectedIndex === 0) {
-            newSelected = newSelected.concat(selected.slice(1));
-        } else if (selectedIndex === selected.length - 1) {
-            newSelected = newSelected.concat(selected.slice(0, -1));
-        } else if (selectedIndex > 0) {
-            newSelected = newSelected.concat(
-                selected.slice(0, selectedIndex),
-                selected.slice(selectedIndex + 1),
-            );
-        }
-
-        setSelected(newSelected);
-    };
-
-
-
-    const isSelected = (name) => selected.indexOf(name) !== -1;
-
-    return (
-        <div className={classes.root}>
-            <Paper className={classes.paper}>
-                <TableContainer className={[classes.container, classes.table].join(' ')}>
-                    <Table stickyHeader aria-label="collapsible table" aria-labelledby="tableTitle" aria-label="enhanced table">
-                        <EnhancedTableHead
-                            classes={classes}
-                            numSelected={selected.length}
-                            order={order}
-                            orderBy={orderBy}
-                            onSelectAllClick={handleSelectAllClick}
-                            onRequestSort={handleRequestSort}
-                            rowCount={rows.length}
-                        >
-                            <TableRow>
-                                {columns.map((column) => (
-                                    <StyledTableCell
-                                        key={column.id}
-                                        align={column.align}
-                                        style={{ minWidth: column.minWidth }}
-                                    >
-                                        {column.label}
-                                    </StyledTableCell>
-                                ))}
-                            </TableRow>
-                        </EnhancedTableHead>
-
-                        <TableBody>
-                            {
-                                stableSort(rows, getComparator(order, orderBy))
-                                    .map((row, index) => {
-                                        console.log(row)
-                                        return <Row key={row.name} row={row} index={index} />
-                                    })}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </Paper>
-        </div>
-    )
-
 }
 
 export default Compare;

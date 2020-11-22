@@ -1,4 +1,4 @@
-import { FaFacebookF, FaWhatsappSquare } from "react-icons/fa";
+import { FaFacebookF } from "react-icons/fa";
 import { AiFillInstagram, AiOutlineWhatsApp } from "react-icons/ai";
 
 const Footer = () => {

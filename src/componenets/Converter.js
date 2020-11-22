@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Card, Button, Form, Row, Col, Alert } from 'react-bootstrap';
+import { useState } from 'react';
+import { Card, Button, Form, Row, Col } from 'react-bootstrap';
 import { getAjaxCall } from '../services/AjaxCall';
 import { apiUrls } from "../services/apiURLS";
 import { BsArrowLeftRight } from "react-icons/bs";

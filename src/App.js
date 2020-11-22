@@ -8,7 +8,8 @@ import '../node_modules/bootstrap/dist/css/bootstrap.css';
 import Compare from './componenets/Compare';
 import { useState } from 'react';
 
-function App() {
+
+const App = () => {
   const [fromCurrency,setFromCurrencyState]=useState('EUR');
   const [toCurrency,setToCurrencyState]=useState('INR');
   const [amount, setAmountState]=useState('100')
@@ -28,8 +29,9 @@ function App() {
           toCurrency = {toCurrency}
           amount ={amount}
         />    
-      </div><div>
-        {/* <Footer/> */}
+      </div>
+      <div>
+        <Footer/>
 
       </div>
     </div>

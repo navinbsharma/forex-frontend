@@ -1,12 +1,9 @@
 import axios from 'axios';
 
 export function getAjaxCall(api, inputParamJSON, callbackFn) {
-  console.log("HLO")
-  console.log(inputParamJSON)
-
   const options = {
     method: 'GET',
-    url: "https://free.currconv.com/api/v7/convert",
+    url: api,
     params: { q: inputParamJSON.q, compact: 'ultra', apiKey: '33fc73cc6d46c586fb5a' },
   };
 

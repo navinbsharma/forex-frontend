@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react'
 import Chart from 'chart.js'
-import { ArrowRight } from '@material-ui/icons';
 
 const AllChart = (props) => {
+    const timestamp = props.timestamp;
+    const rates = props.rates;
 
     useEffect(() => {
         var ctx = document.getElementById('myChart').getContext('2d');
@@ -10,36 +11,26 @@ const AllChart = (props) => {
             type: 'line',
             options: {
                 legend: {
-                    display: true,
+                    display: false,
                     position: 'right',
                 }
             },
             data: {
-                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                labels: timestamp,
                 datasets: [{
                     label: 'rate',
-                    data: [12, 19, 3, 5, 2, 3],
+                    data: rates,
                     backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(46, 91, 187, 0.6)',
                     ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
+                    // borderColor: [
+                    //     'rgba(255, 99, 132, 1)',
+                    // ],
                     borderWidth: 1
                 }]
             },
         })
-    });
+    },[timestamp,rates]);
     return (
         <div>
             <canvas id="myChart" width="800" height="400"></canvas>
