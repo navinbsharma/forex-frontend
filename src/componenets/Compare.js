@@ -382,14 +382,14 @@ const Compare = (props) => {
                         setRowData(temp[0])
                     }
                 } else {
-                    setResultFetch(false);
+                    // setResultFetch(false);
                 }
             });
         }
     }, [amount, toCurrency, fromCurrency]);
 
     return (
-        resultFetch ? <TableView data={props} rows={rows} fromCurrency={fromCurrency} toCurrency={toCurrency} amount={amount} /> : <ErrorView />
+        resultFetch ? <TableView data={props} rows={rows} fromCurrency={fromCurrency} toCurrency={toCurrency} amount={amount} /> : amount === '' ?  <> </> :<ErrorView />
     )
 }
 export default Compare;

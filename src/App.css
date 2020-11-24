@@ -63,13 +63,20 @@ body{
 
 /* FOOTER */
 .footer{
-    background-color: #393e46 !important; 
+    background-image: linear-gradient(to right, #1a1a2e , #0f3460); 
     text-align: center;
     padding: 5%;
     bottom: 0%;
+    color: #f6f5f5 ;
 }
 
 /* Error Page */
+
+.error-container{
+  margin: auto;
+  padding: 5%;
+  text-align: center;
+}
 .error {
   font-family: 'Itim', cursive;
   font-size: 70px;
@@ -78,8 +85,8 @@ body{
 
 .error-msg{
   font-family: 'Itim', cursive;
-  font-size: 40px;
-  color: #ffff;
+  font-size: 30px;
+  color: #0f3460;
   margin-top: 50px;
   text-shadow: 2px 2px 3px rgb(255, 255, 255), 3px 3px 5px rgb(73, 71, 71);
 }
@@ -87,7 +94,7 @@ body{
 .error-txt{
   font-family: 'Itim', cursive;
   font-size: 20px;
-  color : #ffffff;
+  color : #0f3460;
   margin-top: 20px;
 }
 

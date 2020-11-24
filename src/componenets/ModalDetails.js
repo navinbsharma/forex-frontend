@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {Modal, Backdrop, Fade, Paper, Grid, Box, Typography, Table, TableHead, TableRow, TableCell, Button} from '@material-ui/core';
+import { Modal, Backdrop, Fade, Paper, Grid, Box, Typography, Table, TableHead, TableRow, TableCell, Button } from '@material-ui/core';
 import AllChart from './AllChart';
 import Axios from "axios";
 
@@ -29,7 +29,7 @@ export default function TransitionsModal(props) {
     console.log(props)
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
-    const {fromCurrency, toCurrency } = props.data;
+    const { fromCurrency, toCurrency } = props.data;
     const [graphTimeData, setGraphTimeData] = useState([])
     const [graphRatesData, setGraphRatesData] = useState([]);
     console.log(fromCurrency)
@@ -43,13 +43,15 @@ export default function TransitionsModal(props) {
     };
 
     const getGraphData = (fromCurrency, toCurrency, flag) => {
-        Axios.get('http://localhost:5000', { params: { from: fromCurrency, to: toCurrency, fla: flag } })
+        Axios.get('http://localhost:5000', { params: { from: fromCurrency, to: toCurrency, flag: flag } })
             .then(result => {
                 console.log(result)
                 let timestampTemp = [];
                 let currencyTemp = [];
                 result.data.map(row => {
-                    timestampTemp.push(new Date(row.timestamp).getTime());
+                    var a = new Date(row.timestamp * 1000);
+                    var hour = a.getHours();
+                    timestampTemp.push(hour+":00");
                     currencyTemp.push(row.rates["INR"])
                 })
                 setGraphTimeData(timestampTemp);
@@ -104,7 +106,7 @@ export default function TransitionsModal(props) {
                                 <Button onClick={e => getGraphData(fromCurrency, toCurrency, 1)}> 12 Hours</Button><br />
                                 <Button onClick={e => getGraphData(fromCurrency, toCurrency, 2)}> 1 Day</Button><br />
                                 <Button onClick={e => getGraphData(fromCurrency, toCurrency, 3)}> 1 Week</Button><br />
-                                <Button onClick={e => getGraphData(fromCurrency, toCurrency, 4)}> 1 Year</Button><br />
+                                <Button onClick={e => getGraphData(fromCurrency, toCurrency, 4)}> 1 Month</Button><br />
                             </Grid>
                         </Grid>
                     </Box>
