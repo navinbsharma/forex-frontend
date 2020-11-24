@@ -65,11 +65,42 @@ body{
 .footer{
     background-image: linear-gradient(to right, #1a1a2e , #0f3460); 
     text-align: center;
-    padding: 5%;
-    bottom: 0%;
+   padding-left: 100px;
     color: #f6f5f5 ;
+  
+
 }
 
+.title{
+  margin-top: 10px !important;
+  
+}
+
+.list a{
+  color: #f6f5f5 ;
+  text-align: center;
+}
+ .end{
+   padding-top: 20px !important;
+   margin-top: 30px !important;
+   text-align: center;
+ }
+ .icons{
+   height: 30px;
+   width: 30px;
+   margin: 10px;
+ }
+ .social{
+   padding: 0;
+   
+ }
+
+ .insta{
+  height: 50px;
+  width: 40px;
+  margin: 10px;
+  margin-top: 20px;
+ }
 /* Error Page */
 
 .error-container{
@@ -94,7 +125,7 @@ body{
 .error-txt{
   font-family: 'Itim', cursive;
   font-size: 20px;
-  color : #0f3460;
+  color: #3e5372;
   margin-top: 20px;
 }
 
@@ -118,5 +149,64 @@ body{
 }
 .heading{
   font-family: 'Itim', cursive;
-  font-size: 60px;
+  font-weight: bold;
+  color: #0c2668 !important;
+  font-size: 40px;
+  padding: 0;
+  margin: 0;
+  text-shadow: 2px 2px 3px rgb(255, 255, 255), 3px 3px 5px rgb(73, 71, 71);
 }
+
+.carousel{
+  height: 450px;
+}
+
+.d-block{
+  margin-top: 40px;
+}
+
+.carousel-msg{
+  margin-top: 90px;
+}
+
+.para{
+  font-weight: bold;
+  color: #3e5372;
+  margin-top: 20px;
+}
+
+h5{
+  padding: 0;
+  margin: 0;
+}
+
+/*Model-table*/
+.model-heading{
+  text-shadow: 2px 2px 3px rgb(78, 76, 76), 3px 3px 5px rgb(24, 24, 24);
+  color: #8b99c9 !important;
+  background-image: linear-gradient(to right, #1a1a2e , #0f3460); 
+  font-weight: bold !important;
+
+  
+}
+
+.model-table{
+  background-image: linear-gradient(to right, #575777 , #2972cc); 
+  color: #ffffff !important;
+}
+
+.button{
+  background-color:  #133f75 !important;
+  color: #ffffff !important;
+  height: 45px;
+  width: 100px !important;
+  margin-top: 10px !important;
+  border: #ffffff !important;
+}
+
+
+
+/* .view-more :hover{
+  background-color:  #133f75 !important;
+  
+} */

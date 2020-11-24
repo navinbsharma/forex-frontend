@@ -140,6 +140,17 @@ const EnhancedTableHead = (props) => {
             </TableRow>
         </TableHead>
     );
+
+
+
+
+
+
+
+
+
+
+
 }
 
 EnhancedTableHead.propTypes = {
@@ -269,8 +280,8 @@ const Row = (props) => {
                 <StyledTableCell align="center">{row.exchange}</StyledTableCell>
                 <StyledTableCell align="center">{row.fee}</StyledTableCell>
                 <StyledTableCell align="center">{row.receivedAmount}</StyledTableCell>
-                <StyledTableCell align="center">
-                    <TransitionsModal data={props}/>
+                <StyledTableCell align="center" className="view-more">
+                    <TransitionsModal  data={props}/>
                 </StyledTableCell>
             </StyledTableRow>
         </React.Fragment>
