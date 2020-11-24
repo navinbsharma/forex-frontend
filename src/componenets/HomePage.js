@@ -13,7 +13,7 @@ function Homepage() {
     };
 
     return (
-        <Carousel activeIndex={index} onSelect={handleSelect}>
+        <Carousel className="footer" activeIndex={index} onSelect={handleSelect}>
             <Carousel.Item interval={2000}>
                 <Row>
                     <Col>

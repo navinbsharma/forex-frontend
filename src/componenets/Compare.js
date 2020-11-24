@@ -188,7 +188,7 @@ const EnhancedTableToolbar = (props) => {
                 </Typography>
             ) : (
                     <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-                        Nutrition
+                        Providers
                     </Typography>
                 )}
 
@@ -201,6 +201,7 @@ const EnhancedTableToolbar = (props) => {
             ) : (
                     <Tooltip title="Filter list">
                         <IconButton aria-label="filter list">
+                        
                             <FilterListIcon />
                         </IconButton>
                     </Tooltip>
@@ -212,70 +213,6 @@ const EnhancedTableToolbar = (props) => {
 EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
-
-const Row = (props) => {
-    const { amount, fromCurrency, toCurrency } = props;
-    console.log(amount + " " + fromCurrency + "  " + toCurrency)
-    const { row } = props;
-    const { index } = props;
-    const classes = useRowStyles();
-    const [selected, setSelected] = React.useState([]);
-
-    const handleClick = (event, name) => {
-        console.log(name)
-        const selectedIndex = selected.indexOf(name);
-        let newSelected = [];
-
-        if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, name);
-        } else if (selectedIndex === 0) {
-            newSelected = newSelected.concat(selected.slice(1));
-        } else if (selectedIndex === selected.length - 1) {
-            newSelected = newSelected.concat(selected.slice(0, -1));
-        } else if (selectedIndex > 0) {
-            newSelected = newSelected.concat(
-                selected.slice(0, selectedIndex),
-                selected.slice(selectedIndex + 1),
-            );
-        }
-
-        setSelected(newSelected);
-    };
-    const isSelected = (name) => selected.indexOf(name) !== -1;
-    const isItemSelected = isSelected(row.name);
-    const labelId = `enhanced-table-checkbox-${index}`;
-
-    return (
-        <React.Fragment>
-            <StyledTableRow
-                className={classes.root}
-                hov er
-                onClick={(event) => handleClick(event, row.name)}
-                role="checkbox"
-                aria-checked={isItemSelected}
-                tabIndex={-1}
-                key={row.name}
-                selected={isItemSelected}>
-                <StyledTableCell padding="checkbox">
-                    <Checkbox
-                        checked={isItemSelected}
-                        inputProps={{ 'aria-labelledby': labelId }}
-                    />
-                </StyledTableCell>
-                <StyledTableCell align="center" >
-                    <img src={row.logo} alt={row.name} style={{ height: 60, width: 100 }} />
-                </StyledTableCell>
-                <StyledTableCell align="center">{row.name}</StyledTableCell>
-                <StyledTableCell align="center">{row.exchange}</StyledTableCell>
-                <StyledTableCell align="center">{row.fee}</StyledTableCell>
-                <StyledTableCell align="center">{row.receivedAmount}</StyledTableCell>
-                <StyledTableCell align="center">
-                    <TransitionsModal data={props}/>
-                </StyledTableCell>
-            </StyledTableRow>
-        </React.Fragment>
-    );
-}
 
 const ErrorView = () => {
     return (<div>
@@ -290,15 +227,14 @@ const HomeView = () => {
 }
 
 const TableView = (props) => {
-    const { amount, fromCurrency, toCurrency } = props;
     const classes = useStyles();
     const rows = props.rows;
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('name');
     const [selected, setSelected] = React.useState([]);
+    const [setectedProviders,setSelecedProviders] = useState([]);
 
     const handleRequestSort = (event, property) => {
-        console.log(property);
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
@@ -312,10 +248,35 @@ const TableView = (props) => {
         }
         setSelected([]);
     };
+    const handleClick = (event, row) => {
+        const selectedIndex = selected.indexOf(row.name);
+        let newSelected = [];
+
+        if (selectedIndex === -1) {
+            // setSelecedProviders(setectedProviders.push(row))
+            newSelected = newSelected.concat(selected, row.name);
+        } else if (selectedIndex === 0) {
+            newSelected = newSelected.concat(selected.slice(1));
+        } else if (selectedIndex === selected.length - 1) {
+            newSelected = newSelected.concat(selected.slice(0, -1));
+        } else if (selectedIndex > 0) {
+            newSelected = newSelected.concat(
+                selected.slice(0, selectedIndex),
+                selected.slice(selectedIndex + 1),
+            );
+        }
+        console.clear();
+        console.log(setectedProviders);
+        console.log(newSelected);
+        setSelected(newSelected);
+    };
+    const isSelected = (row) => selected.indexOf(row.name) !== -1;
+
 
     return (
         <div className={classes.root}>
             <Paper className={classes.paper}>
+            <EnhancedTableToolbar numSelected={selected.length} />
                 <TableContainer className={[classes.container, classes.table].join(' ')}>
                     <Table stickyHeader aria-label="collapsible table" aria-labelledby="tableTitle" aria-label="enhanced table">
                         <EnhancedTableHead
@@ -332,8 +293,40 @@ const TableView = (props) => {
                             {
                                 stableSort(rows, getComparator(order, orderBy))
                                     .map((row, index) => {
-                                        console.log(row)
-                                        return <Row key={row.name} row={row} index={index} amount={amount} fromCurrency={fromCurrency} toCurrency={toCurrency} />
+                                        const isItemSelected = isSelected(row);
+                                        const labelId = `enhanced-table-checkbox-${index}`;
+
+                                        return (
+                                            <React.Fragment>
+                                                <StyledTableRow
+                                                    className={classes.root}
+                                                    hov er
+                                                    onClick={(event) => handleClick(event, row)}
+                                                    role="checkbox"
+                                                    aria-checked={isItemSelected}
+                                                    tabIndex={-1}
+                                                    key={row.name}
+                                                    selected={isItemSelected}>
+                                                    <StyledTableCell padding="checkbox">
+                                                        <Checkbox
+                                                            checked={isItemSelected}
+                                                            inputProps={{ 'aria-labelledby': labelId }}
+                                                        />
+                                                    </StyledTableCell>
+                                                    <StyledTableCell align="center" >
+                                                        <img src={row.logo} alt={row.name} style={{ height: 60, width: 100 }} />
+                                                    </StyledTableCell>
+                                                    <StyledTableCell align="center">{row.name}</StyledTableCell>
+                                                    <StyledTableCell align="center">{row.exchange}</StyledTableCell>
+                                                    <StyledTableCell align="center">{row.fee}</StyledTableCell>
+                                                    <StyledTableCell align="center">{row.receivedAmount}</StyledTableCell>
+                                                    <StyledTableCell align="center">
+                                                        <TransitionsModal data={props} />
+                                                    </StyledTableCell>
+                                                </StyledTableRow>
+                                            </React.Fragment>
+
+                                        )
                                     })}
                         </TableBody>
                     </Table>
@@ -346,7 +339,7 @@ const TableView = (props) => {
 const Compare = (props) => {
     const { amount, fromCurrency, toCurrency } = props;
     const [rows, setRowData] = useState([]);
-    console.log(fromCurrency+" "+ toCurrency)
+    console.log(fromCurrency + " " + toCurrency)
 
     const [resultFetch, setResultFetch] = useState(false);
     useEffect(() => {
@@ -389,7 +382,7 @@ const Compare = (props) => {
     }, [amount, toCurrency, fromCurrency]);
 
     return (
-        resultFetch ? <TableView data={props} rows={rows} fromCurrency={fromCurrency} toCurrency={toCurrency} amount={amount} /> : amount === '' ?  <> </> :<ErrorView />
+        resultFetch ? <TableView data={props} rows={rows} fromCurrency={fromCurrency} toCurrency={toCurrency} amount={amount} /> : amount === '' ? <> </> : <ErrorView />
     )
 }
 export default Compare;

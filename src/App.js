@@ -18,13 +18,13 @@ const App = () => {
     <div className="App">
       <div className="header p-4 mr-auto">
         <Navbar />
+        { amount === '' && <HomePage /> }
         <Converter
           getfromcurrency={(val) => { setFromCurrencyState(val) }}
           gettocurrency={(val) => { setToCurrencyState(val) }}
           getamount={(val) => { setAmountState(val) }}
           />
       </div>
-          { amount === '' && <HomePage /> }
       <div>
         <Compare
           fromCurrency={fromCurrency}
