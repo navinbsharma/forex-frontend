@@ -63,7 +63,7 @@ export default function TransitionsModal(props) {
 
     return (
         <div>
-            <Button type="button" onClick={handleOpen}>
+            <Button className ="button" type="button" onClick={handleOpen}>
                 View More
             </Button>
             <Modal
@@ -78,22 +78,22 @@ export default function TransitionsModal(props) {
                     timeout: 500,
                 }}
             >
-                <Fade in={open}>
-                    <Box className={classes.paper}>
-                        <Typography variant="h6" gutterBottom component="div">
+                <Fade in={open} >
+                    <Box className={classes.paper} > 
+                        <Typography variant="h6" gutterBottom component="div" className ="model-heading">
                             Graphs & Chart
                             </Typography>
                         <Grid container spacing={2}>
                             <Grid item xs={6}>
                                 <Paper className={classes.paper}>
-                                    <Table size="small" aria-label="purchases">
+                                    <Table size="small" aria-label="purchases" className ="model-table">
                                         <TableHead>
-                                            <TableRow>
-                                                <TableCell>Column</TableCell>
-                                                <TableCell align="center">Highest 1 Week</TableCell>
-                                                <TableCell align="center">Lowest 1 week</TableCell>
-                                                <TableCell align="center">Highest 1 Month</TableCell>
-                                                <TableCell align="center">Lowest 1 Month</TableCell>
+                                            <TableRow className = "model-table">
+                                                <TableCell className = "model-table">Column</TableCell>
+                                                <TableCell align="center" className = "model-table">Highest 1 Week</TableCell>
+                                                <TableCell align="center" className = "model-table">Lowest 1 week</TableCell>
+                                                <TableCell align="center"className = "model-table">Highest 1 Month</TableCell>
+                                                <TableCell align="center" className = "model-table">Lowest 1 Month</TableCell>
                                             </TableRow>
                                         </TableHead>
                                     </Table>
@@ -103,10 +103,10 @@ export default function TransitionsModal(props) {
                                 <AllChart timestamp={graphTimeData} rates={graphRatesData} />
                             </Grid>
                             <Grid item xs={1}>
-                                <Button onClick={e => getGraphData(fromCurrency, toCurrency, 1)}> 12 Hours</Button><br />
-                                <Button onClick={e => getGraphData(fromCurrency, toCurrency, 2)}> 1 Day</Button><br />
-                                <Button onClick={e => getGraphData(fromCurrency, toCurrency, 3)}> 1 Week</Button><br />
-                                <Button onClick={e => getGraphData(fromCurrency, toCurrency, 4)}> 1 Month</Button><br />
+                                <Button className="button"  variant="primary" color="primary" onClick={e => getGraphData(fromCurrency, toCurrency, 1)}> 12 Hours</Button><br />
+                                <Button  className="button" variant="primary"  color="primary" onClick={e => getGraphData(fromCurrency, toCurrency, 2)}> 1 Day</Button><br />
+                                <Button className="button"  variant="primary"  color="primary" onClick={e => getGraphData(fromCurrency, toCurrency, 3)}> 1 Week</Button><br />
+                                <Button  className="button" variant="primary"  color="primary" onClick={e => getGraphData(fromCurrency, toCurrency, 4)}> 1 Month</Button><br />
                             </Grid>
                         </Grid>
                     </Box>
