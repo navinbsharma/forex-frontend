@@ -225,73 +225,6 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-<<<<<<< HEAD
-=======
-const Row = (props) => {
-    const { amount, fromCurrency, toCurrency } = props;
-    console.log(amount + " " + fromCurrency + "  " + toCurrency)
-    const { row } = props;
-    const { index } = props;
-    const classes = useRowStyles();
-    const [selected, setSelected] = React.useState([]);
-
-    const handleClick = (event, name) => {
-        console.log(name)
-        const selectedIndex = selected.indexOf(name);
-        let newSelected = [];
-
-        if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, name);
-        } else if (selectedIndex === 0) {
-            newSelected = newSelected.concat(selected.slice(1));
-        } else if (selectedIndex === selected.length - 1) {
-            newSelected = newSelected.concat(selected.slice(0, -1));
-        } else if (selectedIndex > 0) {
-            newSelected = newSelected.concat(
-                selected.slice(0, selectedIndex),
-                selected.slice(selectedIndex + 1),
-            );
-        }
-
-        setSelected(newSelected);
-    };
-    const isSelected = (name) => selected.indexOf(name) !== -1;
-    const isItemSelected = isSelected(row.name);
-    const labelId = `enhanced-table-checkbox-${index}`;
-
-    return (
-        <React.Fragment>
-            <StyledTableRow
-                className={classes.root}
-                hov er
-                onClick={(event) => handleClick(event, row.name)}
-                role="checkbox"
-                aria-checked={isItemSelected}
-                tabIndex={-1}
-                key={row.name}
-                selected={isItemSelected}>
-                <StyledTableCell padding="checkbox">
-                    <Checkbox
-                        checked={isItemSelected}
-                        inputProps={{ 'aria-labelledby': labelId }}
-                    />
-                </StyledTableCell>
-                <StyledTableCell align="center" >
-                    <img src={row.logo} alt={row.name} style={{ height: 60, width: 100 }} />
-                </StyledTableCell>
-                <StyledTableCell align="center">{row.name}</StyledTableCell>
-                <StyledTableCell align="center">{row.exchange}</StyledTableCell>
-                <StyledTableCell align="center">{row.fee}</StyledTableCell>
-                <StyledTableCell align="center">{row.receivedAmount}</StyledTableCell>
-                <StyledTableCell align="center" className="view-more">
-                    <TransitionsModal  data={props}/>
-                </StyledTableCell>
-            </StyledTableRow>
-        </React.Fragment>
-    );
-}
-
->>>>>>> dev-jaya
 const ErrorView = () => {
     return (<div>
         <ErrorPage />
@@ -343,9 +276,6 @@ const TableView = (props) => {
                 selected.slice(selectedIndex + 1),
             );
         }
-        console.clear();
-        console.log(setectedProviders);
-        console.log(newSelected);
         setSelected(newSelected);
     };
     const isSelected = (row) => selected.indexOf(row.name) !== -1;
@@ -417,7 +347,6 @@ const TableView = (props) => {
 const Compare = (props) => {
     const { amount, fromCurrency, toCurrency } = props;
     const [rows, setRowData] = useState([]);
-    console.log(fromCurrency + " " + toCurrency)
 
     const [resultFetch, setResultFetch] = useState(false);
     useEffect(() => {
@@ -429,7 +358,6 @@ const Compare = (props) => {
                 sendAmount: amount
             }
             getAjaxCall(apiAuth, reqBody, callback => {
-                console.log(callback.data)
                 if (Object.keys(callback.data).length !== 0) {
                     if ("errors" in callback.data) {
                         setResultFetch(false);
@@ -437,8 +365,6 @@ const Compare = (props) => {
                     else if (callback.data.providers.length == 0) {
                         setResultFetch(false);
                     } else {
-                        console.clear();
-                        console.log(callback.data);
                         setResultFetch(true);
                         const temp = [];
                         temp.push(callback.data.providers.map(row => {

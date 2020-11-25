@@ -14,13 +14,12 @@ export function getAjaxCall(api, inputParamJSON, callbackFn) {
       return response.data
     }
   }).catch(function (error) {
-    console.error(error);
+    return error;
   });
 
 }
 
 export function getAjaxDataCall(api, inputParamJSON, callbackFn) {
-  console.log(inputParamJSON)
 
   const options = {
     method: 'GET',
@@ -35,7 +34,7 @@ export function getAjaxDataCall(api, inputParamJSON, callbackFn) {
       return response.data
     }
   }).catch(function (error) {
-    console.error(error);
+    return error;
   });
 
 }

@@ -13,11 +13,7 @@ function Homepage() {
     };
 
     return (
-<<<<<<< HEAD
-        <Carousel className="footer" activeIndex={index} onSelect={handleSelect}>
-=======
         <Carousel className = "carousel container" activeIndex={index} onSelect={handleSelect}>
->>>>>>> dev-jaya
             <Carousel.Item interval={2000}>
                 <Row>
                     <Col>

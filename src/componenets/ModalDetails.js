@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Modal, Backdrop, Fade, Paper, Grid, Box, Typography, Table, TableHead, TableRow, TableCell, Button } from '@material-ui/core';
 import AllChart from './AllChart';
 import Axios from "axios";
+import { Col, Container, Row } from 'react-bootstrap';
 
 const useStyles = makeStyles((theme) => ({
     modal: {
@@ -26,13 +27,11 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function TransitionsModal(props) {
-    console.log(props)
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const { fromCurrency, toCurrency } = props.data;
     const [graphTimeData, setGraphTimeData] = useState([])
     const [graphRatesData, setGraphRatesData] = useState([]);
-    console.log(fromCurrency)
 
     const handleOpen = () => {
         setOpen(true);
@@ -45,25 +44,24 @@ export default function TransitionsModal(props) {
     const getGraphData = (fromCurrency, toCurrency, flag) => {
         Axios.get('http://localhost:5000', { params: { from: fromCurrency, to: toCurrency, flag: flag } })
             .then(result => {
-                console.log(result)
                 let timestampTemp = [];
                 let currencyTemp = [];
                 result.data.map(row => {
                     var a = new Date(row.timestamp * 1000);
                     var hour = a.getHours();
-                    timestampTemp.push(hour+":00");
+                    timestampTemp.push(hour + ":00");
                     currencyTemp.push(row.rates["INR"])
                 })
                 setGraphTimeData(timestampTemp);
                 setGraphRatesData(currencyTemp)
             })
-            .catch(error => console.log(error))
+            .catch(error => error)
     }
 
 
     return (
         <div>
-            <Button className ="button" type="button" onClick={handleOpen}>
+            <Button className="button" type="button" onClick={handleOpen}>
                 View More
             </Button>
             <Modal
@@ -79,36 +77,38 @@ export default function TransitionsModal(props) {
                 }}
             >
                 <Fade in={open} >
-                    <Box className={classes.paper} > 
-                        <Typography variant="h6" gutterBottom component="div" className ="model-heading">
+                    <Box className={classes.paper} >
+                        <Typography variant="h6" gutterBottom component="div" className="model-heading">
                             Graphs & Chart
                             </Typography>
-                        <Grid container spacing={2}>
-                            <Grid item xs={6}>
-                                <Paper className={classes.paper}>
-                                    <Table size="small" aria-label="purchases" className ="model-table">
-                                        <TableHead>
-                                            <TableRow className = "model-table">
-                                                <TableCell className = "model-table">Column</TableCell>
-                                                <TableCell align="center" className = "model-table">Highest 1 Week</TableCell>
-                                                <TableCell align="center" className = "model-table">Lowest 1 week</TableCell>
-                                                <TableCell align="center"className = "model-table">Highest 1 Month</TableCell>
-                                                <TableCell align="center" className = "model-table">Lowest 1 Month</TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                    </Table>
-                                </Paper>
-                            </Grid>
-                            <Grid item xs={5}>
-                                <AllChart timestamp={graphTimeData} rates={graphRatesData} />
-                            </Grid>
-                            <Grid item xs={1}>
-                                <Button className="button"  variant="primary" color="primary" onClick={e => getGraphData(fromCurrency, toCurrency, 1)}> 12 Hours</Button><br />
-                                <Button  className="button" variant="primary"  color="primary" onClick={e => getGraphData(fromCurrency, toCurrency, 2)}> 1 Day</Button><br />
-                                <Button className="button"  variant="primary"  color="primary" onClick={e => getGraphData(fromCurrency, toCurrency, 3)}> 1 Week</Button><br />
-                                <Button  className="button" variant="primary"  color="primary" onClick={e => getGraphData(fromCurrency, toCurrency, 4)}> 1 Month</Button><br />
-                            </Grid>
-                        </Grid>
+                        <Container>
+                            <Row>
+                                <Col sm={12}>
+                                    <Paper className={classes.paper}>
+                                        <Table size="small" aria-label="purchases" className="model-table">
+                                            <TableHead>
+                                                <TableRow className="model-table">
+                                                    <TableCell className="model-table">Column</TableCell>
+                                                    <TableCell align="center" className="model-table">Highest 1 Week</TableCell>
+                                                    <TableCell align="center" className="model-table">Lowest 1 week</TableCell>
+                                                    <TableCell align="center" className="model-table">Highest 1 Month</TableCell>
+                                                    <TableCell align="center" className="model-table">Lowest 1 Month</TableCell>
+                                                </TableRow>
+                                            </TableHead>
+                                        </Table>
+                                    </Paper>
+                                </Col>
+                                <Col  sm={10}>
+                                    <AllChart timestamp={graphTimeData} rates={graphRatesData} />
+                                </Col>
+                                <Col  sm={2}>
+                                    <Button className="button" variant="primary" color="primary" onClick={e => getGraphData(fromCurrency, toCurrency, 1)}> 12 Hours</Button><br />
+                                    <Button className="button" variant="primary" color="primary" onClick={e => getGraphData(fromCurrency, toCurrency, 2)}> 1 Day</Button><br />
+                                    <Button className="button" variant="primary" color="primary" onClick={e => getGraphData(fromCurrency, toCurrency, 3)}> 1 Week</Button><br />
+                                    <Button className="button" variant="primary" color="primary" onClick={e => getGraphData(fromCurrency, toCurrency, 4)}> 1 Month</Button><br />
+                                </Col>
+                            </Row>
+                        </Container>
                     </Box>
 
                 </Fade>

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Card, Button, Form, Row, Col } from 'react-bootstrap';
+import { Card, Button, Form, Row, Col, Container } from 'react-bootstrap';
 import { getAjaxCall } from '../services/AjaxCall';
 import { apiUrls } from "../services/apiURLS";
 import { BsArrowLeftRight } from "react-icons/bs";
@@ -189,9 +189,9 @@ function Converter(props) {
 
     const handleChange = ({ target }) => {
         const { name, value } = target;
-     
+
         if (name === 'amount') {
-                setAmountState(value)
+            setAmountState(value)
         }
         if (name === 'fromCurrency') {
             setFromCurrencyState(value);
@@ -199,12 +199,12 @@ function Converter(props) {
         if (name === 'toCurrency') {
             setToCurrencyState(value);
         }
-        
+
     }
 
     const handleSubmit = () => {
 
-       
+
         if (amount.length > 0) {
             let currencyFromTo = fromCurrencyState + '_' + toCurrencyState;
             let apiAuth = apiUrls.convertMoney;
@@ -231,7 +231,7 @@ function Converter(props) {
 
     const OutputResult = () => {
         return (<div>
-            <Card classnameName="result-box">
+            <Card className="result-box">
                 <Card.Title>Result</Card.Title>
                 <Card.Body>
                     1 {resultFromCurrency} = {resultCurrency} {resultToCurrency}<br />
@@ -241,7 +241,7 @@ function Converter(props) {
         </div >)
     }
 
-    const handleReverse  = () => {
+    const handleReverse = () => {
         const temp = toCurrencyState;
         document.getElementsByName('toCurrency')[0].value = fromCurrencyState;
         document.getElementsByName('fromCurrency')[0].value = temp;
@@ -249,40 +249,42 @@ function Converter(props) {
         setFromCurrencyState(temp);
     }
 
-    return (<div classnameName="m-3 p-4">
-        <Card classnameName="currency-converter">
+    return (<div className="m-3 p-4">
+        <Card className="currency-converter">
             <Card.Body>
                 <Card.Title>FOREX AGGREGRATOR</Card.Title>
-                <Form onSubmit={handleSubmit}>
+                <Container>
+
+
                     <Row>
-                        <Col xs={12} md={3}>
+                        <Col xs={12} sm={12} lg={3}>
                             <Form.Group controlId="formBasicEmail">
                                 <Form.Label>Amount</Form.Label>
                                 <Form.Control type="number" placeholder="Amount" name="amount" value={amount} onChange={handleChange} />
                             </Form.Group>
                         </Col>
-                        <Col xs={6} md={3}>
+                        <Col xs={12} sm={5} lg={3}>
                             <Form.Group controlId="formBasicEmail">
                                 <Form.Label>From</Form.Label>
                                 <Form.Control name="fromCurrency" as="select" onChange={handleChange}>{Object.keys(symbols).map((code) => MakeItem(code, symbols[code]))}</Form.Control>
                             </Form.Group>
                         </Col>
-                        <Col xs={12} md={1} classnameName="currency-converter">
-                            <br/>
-                            <Button  onClick={handleReverse}><BsArrowLeftRight /></Button>
+                        <Col xs={12} sm={2} lg={1} className="currency-converter">
+                            <br />
+                            <Button onClick={handleReverse}><BsArrowLeftRight /></Button>
                         </Col>
-                        <Col xs={6} md={3}>
+                        <Col xs={12} sm={5} lg={3}>
                             <Form.Group controlId="formBasicEmail">
                                 <Form.Label>To</Form.Label>
                                 <Form.Control name="toCurrency" as="select" onChange={handleChange} >{Object.keys(symbols).map((code) => MakeItem(code, symbols[code]))}</Form.Control>
                             </Form.Group>
                         </Col>
-                        <Col xs={12} md={2}>
-                        <br/>
+                        <Col xs={12} sm={12} lg={2}>
+                            <br />
                             <Button variant="primary" onClick={handleSubmit}>Go</Button>
                         </Col>
                     </Row>
-                </Form>
+                </Container>
             </Card.Body>
         </Card>
         { flag && <OutputResult />}
