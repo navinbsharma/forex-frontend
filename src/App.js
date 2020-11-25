@@ -9,6 +9,7 @@ import '../node_modules/bootstrap/dist/css/bootstrap.css';
 import Compare from './componenets/Compare';
 import { useState } from 'react';
 import Logo from './images/images.jpg'
+import LoginModel from './componenets/LoginModel';
 
 const App = () => {
   const [fromCurrency, setFromCurrencyState] = useState('');
@@ -33,6 +34,7 @@ const App = () => {
         />
       </div>
       <div>
+      <LoginModel/>
         <Footer />
       </div>
     </div>
