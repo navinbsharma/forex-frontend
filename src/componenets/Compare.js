@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles, withStyles, lighten } from '@material-ui/core/styles';
 import clsx from 'clsx';
-import DeleteIcon from '@material-ui/icons/Delete';
+import DeleteIcon from '@material-ui/icons/VerticalSplit';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import ErrorPage from './ErrorPage';
 import HomePage from './HomePage';
@@ -10,6 +10,8 @@ import { apiUrls } from '../services/apiURLS';
 import { getAjaxCall } from '../services/AjaxCall';
 import { TableCell, Tooltip, Checkbox, TableSortLabel, Toolbar, Paper, IconButton, Table, TableBody, TableContainer, TableHead, TableRow, Typography } from '@material-ui/core';
 import TransitionsModal from "./ModalDetails";
+import { Button } from "react-bootstrap";
+import ModalForSelectedData from '../Modals/ModalForSelectedData';
 
 const useRowStyles = makeStyles({
     root: {
@@ -21,7 +23,6 @@ const useRowStyles = makeStyles({
 });
 const useStyles = makeStyles((theme) => ({
     root: {
-
         flexGrow: 1,
     },
     container: {
@@ -51,15 +52,17 @@ const StyledTableCell = withStyles((theme) => ({
     head: {
         backgroundColor: "#0f3460",
         color: theme.palette.common.white,
+        fontSize: 18,
+
     },
     body: {
-        fontSize: 14,
+        fontSize: 17,
     },
 }))(TableCell);
 const StyledTableRow = withStyles((theme) => ({
     root: {
         '&:nth-of-type(odd)': {
-            backgroundColor: '#f6f5f5',
+            backgroundColor: '#E8EAF6',
         },
     },
 }))(TableRow);
@@ -140,17 +143,6 @@ const EnhancedTableHead = (props) => {
             </TableRow>
         </TableHead>
     );
-
-
-
-
-
-
-
-
-
-
-
 }
 
 EnhancedTableHead.propTypes = {
@@ -171,12 +163,12 @@ const useToolbarStyles = makeStyles((theme) => ({
     highlight:
         theme.palette.type === 'light'
             ? {
-                color: theme.palette.secondary.main,
-                backgroundColor: lighten(theme.palette.secondary.light, 0.85),
+                color: '#C5CAE9',
+                backgroundColor: '#5a65b2',
             }
             : {
                 color: theme.palette.text.primary,
-                backgroundColor: theme.palette.secondary.dark,
+                backgroundColor: '#7986CB',
             },
     title: {
         flex: '1 1 100%',
@@ -203,20 +195,13 @@ const EnhancedTableToolbar = (props) => {
                     </Typography>
                 )}
 
-            {numSelected > 0 ? (
-                <Tooltip title="Delete">
+            {numSelected > 0 && (
+                <Tooltip title="Compare">
                     <IconButton aria-label="delete">
-                        <DeleteIcon />
+                        <ModalForSelectedData rows={props.providersSelected} />
                     </IconButton>
                 </Tooltip>
-            ) : (
-                    <Tooltip title="Filter list">
-                        <IconButton aria-label="filter list">
-                        
-                            <FilterListIcon />
-                        </IconButton>
-                    </Tooltip>
-                )}
+            )}
         </Toolbar>
     );
 };
@@ -224,6 +209,7 @@ const EnhancedTableToolbar = (props) => {
 EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
+
 
 const ErrorView = () => {
     return (<div>
@@ -239,11 +225,13 @@ const HomeView = () => {
 
 const TableView = (props) => {
     const classes = useStyles();
-    const rows = props.rows;
+    let rows = props.rows;
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('name');
     const [selected, setSelected] = React.useState([]);
-    const [setectedProviders,setSelecedProviders] = useState([]);
+    const [selectedProviders, setSelectedProviders] = useState([]);
+    const [restoredPerviousData, setRestoredPreviousData] = useState()
+        ;
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -253,29 +241,37 @@ const TableView = (props) => {
 
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
+            const rowSeleceted = rows.map(row => row)
+            setSelectedProviders(rowSeleceted);
             const newSelecteds = rows.map((n) => n.name);
             setSelected(newSelecteds);
             return;
         }
         setSelected([]);
+        setSelectedProviders([])
     };
     const handleClick = (event, row) => {
         const selectedIndex = selected.indexOf(row.name);
         let newSelected = [];
+        let rowSelected = selectedProviders;
 
         if (selectedIndex === -1) {
-            // setSelecedProviders(setectedProviders.push(row))
+            rowSelected.push(row);
             newSelected = newSelected.concat(selected, row.name);
         } else if (selectedIndex === 0) {
+            rowSelected.shift();
             newSelected = newSelected.concat(selected.slice(1));
         } else if (selectedIndex === selected.length - 1) {
+            rowSelected.pop();
             newSelected = newSelected.concat(selected.slice(0, -1));
         } else if (selectedIndex > 0) {
+            rowSelected.splice(selectedIndex, 1)
             newSelected = newSelected.concat(
                 selected.slice(0, selectedIndex),
                 selected.slice(selectedIndex + 1),
             );
         }
+        setSelectedProviders(rowSelected);
         setSelected(newSelected);
     };
     const isSelected = (row) => selected.indexOf(row.name) !== -1;
@@ -284,7 +280,7 @@ const TableView = (props) => {
     return (
         <div className={classes.root}>
             <Paper className={classes.paper}>
-            <EnhancedTableToolbar numSelected={selected.length} />
+                <EnhancedTableToolbar numSelected={selected.length} providersSelected={selectedProviders} />
                 <TableContainer className={[classes.container, classes.table].join(' ')}>
                     <Table stickyHeader aria-label="collapsible table" aria-labelledby="tableTitle" aria-label="enhanced table">
                         <EnhancedTableHead
@@ -308,7 +304,7 @@ const TableView = (props) => {
                                             <React.Fragment>
                                                 <StyledTableRow
                                                     className={classes.root}
-                                                    hov er
+                                                    hover
                                                     onClick={(event) => handleClick(event, row)}
                                                     role="checkbox"
                                                     aria-checked={isItemSelected}
@@ -317,6 +313,7 @@ const TableView = (props) => {
                                                     selected={isItemSelected}>
                                                     <StyledTableCell padding="checkbox">
                                                         <Checkbox
+                                                            color="primary"
                                                             checked={isItemSelected}
                                                             inputProps={{ 'aria-labelledby': labelId }}
                                                         />

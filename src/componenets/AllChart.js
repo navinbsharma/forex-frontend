@@ -4,11 +4,13 @@ import Chart from 'chart.js'
 const AllChart = (props) => {
     const timestamp = props.timestamp;
     const rates = props.rates;
+    const type = props.type
+
 
     useEffect(() => {
         var ctx = document.getElementById('myChart').getContext('2d');
         var myChart = new Chart(ctx, {
-            type: 'line',
+            type: type,
             options: {
                 legend: {
                     display: false,
@@ -30,7 +32,7 @@ const AllChart = (props) => {
                 }]
             },
         })
-    },[timestamp,rates]);
+    },[timestamp,rates, type]);
     return (
         <div>
             <canvas id="myChart" width="800" height="400"></canvas>

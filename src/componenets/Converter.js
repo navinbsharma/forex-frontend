@@ -211,7 +211,8 @@ function Converter(props) {
             const reqBody = {
                 q: currencyFromTo,
                 compact: 'ultra',
-                apiKey: '33fc73cc6d46c586fb5a'
+                apiKey: '5285e5efc8f2b8f7127b'
+
             }
             getAjaxCall(apiAuth, reqBody, callback => {
                 if (Object.keys(callback.data).length !== 0) {
