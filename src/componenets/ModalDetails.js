@@ -100,7 +100,7 @@ export default function TransitionsModal(props) {
                                         </Paper>
                                     </Col>
                                     <Col  sm={10} lg={4}>
-                                        <AllChart timestamp={graphTimeData} rates={graphRatesData} type={graphType} />
+                                        <AllChart label={graphTimeData} data={graphRatesData} type={graphType} />
                                     </Col>
                                     <Col  sm={2} lg={2}>
                                         <Button className="button" variant="primary" color="primary" onClick={e => getGraphData(fromCurrency, toCurrency, 1)}> 12 Hours</Button><br />

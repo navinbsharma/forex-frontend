@@ -364,6 +364,7 @@ const Compare = (props) => {
                     } else {
                         setResultFetch(true);
                         const temp = [];
+                        console.log(callback.data);
                         temp.push(callback.data.providers.map(row => {
                             return {
                                 'logo': row.logo,
@@ -371,6 +372,7 @@ const Compare = (props) => {
                                 'exchange': row.quotes[0].rate,
                                 'fee': row.quotes[0].fee,
                                 'receivedAmount': row.quotes[0].receivedAmount,
+                                'markup' : row.quotes[0].markup
                             }
                         }));
                         setRowData(temp[0])

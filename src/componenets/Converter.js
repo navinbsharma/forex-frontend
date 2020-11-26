@@ -3,6 +3,7 @@ import { Card, Button, Form, Row, Col, Container } from 'react-bootstrap';
 import { getAjaxCall } from '../services/AjaxCall';
 import { apiUrls } from "../services/apiURLS";
 import { BsArrowLeftRight } from "react-icons/bs";
+import Loading from './Loading';
 
 function Converter(props) {
     const [amount, setAmountState] = useState('');
@@ -203,6 +204,7 @@ function Converter(props) {
     }
 
     const handleSubmit = () => {
+        <Loading isloading="true" />
 
 
         if (amount.length > 0) {
@@ -250,7 +252,7 @@ function Converter(props) {
         setFromCurrencyState(temp);
     }
 
-    return (<div className="m-3 p-4">
+    return (<div>
         <Card className="currency-converter">
             <Card.Body>
                 <Card.Title>FOREX AGGREGRATOR</Card.Title>

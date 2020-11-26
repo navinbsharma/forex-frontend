@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react'
 import Chart from 'chart.js'
 
-const AllChart = (props) => {
+const MarkupChart = (props) => {
     const label = props.label;
     const data = props.data;
     const type = props.type;
 
 
     useEffect(() => {
-        var ctx = document.getElementById('myChart').getContext('2d');
-        var myChart = new Chart(ctx, {
+        var ctx = document.getElementById('mark').getContext('2d');
+        var mark = new Chart(ctx, {
             type: type,
             options: {
                 legend: {
@@ -34,8 +34,8 @@ const AllChart = (props) => {
         })
     });
     return (
-            <canvas id="myChart" width="400" height="200"></canvas>
+            <canvas id="mark" width="400" height="200"></canvas>
     )
 }
 
-export default AllChart;
+export default MarkupChart;

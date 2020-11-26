@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Backdrop, Fade, Box, Typography, makeStyles, withStyles } from '@material-ui/core';
+import { Modal, Backdrop, Fade, Box, Typography, makeStyles, withStyles, Container } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/VerticalSplit';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -8,6 +8,13 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import AllChart from '../componenets/AllChart';
+import { FeedbackSharp } from '@material-ui/icons';
+import { Button, Col, Row } from 'react-bootstrap';
+import ExchangeChart from '../componenets/Chart/ExchangeChart'
+import FeesChart from '../componenets/Chart/FeesChart';
+import RecievedChart from '../componenets/Chart/RecievedAmount';
+import MarkupChart from '../componenets/Chart/MarkupChart'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -15,6 +22,8 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        overflow:'scroll',
+        position:'absolute',
     },
     paper: {
         backgroundColor: theme.palette.background.paper,
@@ -32,34 +41,76 @@ const useStyles = makeStyles((theme) => ({
 
 const StyledTableCell = withStyles((theme) => ({
     head: {
-      backgroundColor: theme.palette.common.black,
-      color: theme.palette.common.white,
+        backgroundColor: theme.palette.common.black,
+        color: theme.palette.common.white,
     },
     body: {
-      fontSize: 14,
+        fontSize: 14,
     },
-  }))(TableCell);
-  
-  const StyledTableRow = withStyles((theme) => ({
+}))(TableCell);
+
+const StyledTableRow = withStyles((theme) => ({
     root: {
-      '&:nth-of-type(odd)': {
-        backgroundColor: theme.palette.action.hover,
-      },
+        '&:nth-of-type(odd)': {
+            backgroundColor: theme.palette.action.hover,
+        },
     },
-  }))(TableRow);
+}))(TableRow);
 
 const ModalForSelectedData = (props) => {
     const classes = useStyles();
     const rows = props.rows;
     const [open, setOpen] = React.useState(false);
+    const [label, setLabel] = React.useState([]);
+    const [exchange, setExchange] = React.useState([]);
+    const [fee, setFee] = React.useState([]);
+    const [recieveRate, setRecieveRates] = React.useState([]);
+    const [markUp, setMarkUp] = React.useState([]);
+
+
 
     const handleOpen = () => {
+        console.log(rows)
+        xchange();
+        name();
+        recievedRate();
+        fees();
+        markups();
         setOpen(true);
     };
 
     const handleClose = () => {
         setOpen(false);
     };
+
+    const fees = () => {
+        let feesRate = [];
+        rows.map(row => feesRate.push(row.fee));
+        setFee(feesRate);
+    }
+    const recievedRate = () => {
+        let recieved = [];
+        rows.map(row => recieved.push(row.receivedAmount));
+        setRecieveRates(recieved);
+    }
+
+    const xchange = () => {
+        let exchangeRate = [];
+        rows.map(row => exchangeRate.push(row.exchange));
+        setExchange(exchangeRate);
+    }
+
+    const name = () => {
+        let labelName = [];
+        rows.map(row => labelName.push(row.name))
+        setLabel(labelName);
+    }
+
+    const markups = () => {
+        let markUpAm = [];
+        rows.map(row => markUpAm.push(row.markup))
+        setMarkUp(markUpAm);
+    }
 
     return (
         <div>
@@ -79,33 +130,37 @@ const ModalForSelectedData = (props) => {
                 <Fade in={open} >
                     <Box className={classes.paper}>
                         <Typography >
-                            Comparision 
+                            Comparision
                         </Typography>
-                        <TableContainer component={Paper}>
-                            <Table className={classes.table} aria-label="simple table">
-                                <TableHead>
-                                    <TableRow>
-                                        <StyledTableCell>Name</StyledTableCell>
-                                        <StyledTableCell align="right">Exchange</StyledTableCell>
-                                        <StyledTableCell align="right">Fees</StyledTableCell>
-                                        <StyledTableCell align="right">You'll Recieve</StyledTableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {rows.map((row) => (
-                                        <TableRow key={row.name}>
-                                            <TableCell component="th" scope="row">
-                                                {row.name}
-                                            </TableCell>
-                                            <TableCell align="right">{row.exchange}</TableCell>
-                                            <TableCell align="right">{row.fee}</TableCell>
-                                            <TableCell align="right">{row.receivedAmount}</TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-
+                        <Container>
+                            <Row>
+                                <Col sm={12} lg={6}>
+                                    <ExchangeChart label={label} data={exchange} type="bar" />
+                                    <Typography>
+                                        Exchange Rate Graph
+                                </Typography>
+                                </Col>
+                                <Col sm={12} lg={6}>
+                                    <FeesChart label={label} data={fee} type="bar" />
+                                    <Typography>
+                                        Fees Graph
+                                </Typography>
+                                </Col>
+                                <Col sm={12} lg={6}>
+                                    <RecievedChart label={label} data={recieveRate} type="bar" />
+                                    <Typography>
+                                        Recieving Amount
+                                </Typography>
+                                </Col>
+                                <Col sm={12} lg={6}>
+                                    <MarkupChart label={label} data={markUp} type="bar" />
+                                    <Typography>
+                                        Markup Fees
+                                </Typography>
+                                </Col>
+                                
+                            </Row>
+                        </Container>
                     </Box>
 
                 </Fade>

@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import '../App.css';
 import ErrorTwoToneIcon from '@material-ui/icons/ErrorTwoTone';
-import Logo from '../images/Astronaut/Astronaut-01.svg'
+import Logo from '../images/error1.gif'
 import { Grid } from '@material-ui/core'
 import { Col, Row } from 'react-bootstrap';
+
 export class errorPage extends Component {
     render() {
         return (
@@ -11,7 +12,7 @@ export class errorPage extends Component {
 
                 <Row>
                     <Col>
-                        <img src={Logo} alt="error" />
+                        <img src={Logo} height="500" width="500" alt="error" />
                     </Col>
                     <Col className="error-container">
                         <h1 className="error" style={{ color: "#0f3460", }}>
@@ -26,11 +27,6 @@ export class errorPage extends Component {
 
                     </Col>
                 </Row>
-
-
-
-
-
             </div>
         )
     }
