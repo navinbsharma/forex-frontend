@@ -7,12 +7,14 @@ import Loading from './Loading';
 
 function Converter(props) {
     const [amount, setAmountState] = useState('');
+    const [amountError, setAmountError ] = useState('')
     const [flag, setFlagState] = useState(false);
     const [fromCurrencyState, setFromCurrencyState] = useState('AED');
     const [toCurrencyState, setToCurrencyState] = useState('AED');
     const [resultCurrency, setResultCurrencyState] = useState();
     const [resultFromCurrency, setResultFromCurrencyState] = useState('AED');
     const [resultToCurrency, setResultToCurrencyState] = useState('AED');
+    const [isLoading, setIsLoading] = useState(false);
 
     const symbols = {
         "AED": "United Arab Emirates Dirham",
@@ -204,10 +206,9 @@ function Converter(props) {
     }
 
     const handleSubmit = () => {
-        <Loading isloading="true" />
-
-
         if (amount.length > 0) {
+            setAmountError('')
+            setIsLoading(true);
             let currencyFromTo = fromCurrencyState + '_' + toCurrencyState;
             let apiAuth = apiUrls.convertMoney;
             const reqBody = {
@@ -225,11 +226,16 @@ function Converter(props) {
                     props.getfromcurrency(fromCurrencyState);
                     props.gettocurrency(toCurrencyState);
                     props.getamount(amount);
-                } else {
+                    setIsLoading(false);
 
+                } else {
+                    setIsLoading(false);
                 }
             });
+        }else{
+            setAmountError("Please Enter Some Amount!!!")
         }
+        
     }
 
     const OutputResult = () => {
@@ -252,7 +258,8 @@ function Converter(props) {
         setFromCurrencyState(temp);
     }
 
-    return (<div>
+    return (<div className={isLoading ? 'parentDisable' : ''}>
+        <Loading isLoading={isLoading} />
         <Card className="currency-converter">
             <Card.Body>
                 <Card.Title>FOREX AGGREGRATOR</Card.Title>
@@ -263,7 +270,8 @@ function Converter(props) {
                         <Col xs={12} sm={12} lg={3}>
                             <Form.Group controlId="formBasicEmail">
                                 <Form.Label>Amount</Form.Label>
-                                <Form.Control type="number" placeholder="Amount" name="amount" value={amount} onChange={handleChange} />
+                                <Form.Control type="number" placeholder="Amount" name="amount" value={amount} onChange={handleChange} required />
+                                {amountError !== '' && <span style={{color:'#ff0000',font:'8px'}}>{amountError}</span>}
                             </Form.Group>
                         </Col>
                         <Col xs={12} sm={5} lg={3}>

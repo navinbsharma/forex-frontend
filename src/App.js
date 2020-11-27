@@ -10,6 +10,8 @@ import Compare from './componenets/Compare';
 import { useState } from 'react';
 import Logo from './images/images.jpg'
 import LoginModel from './componenets/LoginModel';
+import Loading from './componenets/Loading';
+
 
 const App = () => {
   const [fromCurrency, setFromCurrencyState] = useState('');
@@ -19,7 +21,6 @@ const App = () => {
     <div className="App">
       <div className="header p-4 mr-auto">
         <Navbar />
-        {amount === '' && <HomePage />}
         <Converter
           getfromcurrency={(val) => { setFromCurrencyState(val) }}
           gettocurrency={(val) => { setToCurrencyState(val) }}
@@ -27,6 +28,7 @@ const App = () => {
         />
       </div>
       <div>
+        {amount === '' && <HomePage />}
         <Compare
           fromCurrency={fromCurrency}
           toCurrency={toCurrency}
@@ -34,6 +36,7 @@ const App = () => {
         />
       </div>
       <div>
+
         <Footer />
       </div>
     </div>
