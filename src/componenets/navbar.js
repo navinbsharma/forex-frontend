@@ -17,7 +17,7 @@ function NavBar() {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="ml-auto">
-                        <Nav.Link><span className="nav-item-color">Login/Sign Up</span></Nav.Link>
+                        {/* <Nav.Link><span className="nav-item-color">Login/Sign Up</span></Nav.Link> */}
 
                         {/* <OverlayTrigger placement="bottom" delay={{ show: 250, hide: 300 }} overlay={renderTooltip}>
                             <Nav.Link href="#link"><span className="nav-item-color">Near By Agent</span></Nav.Link>

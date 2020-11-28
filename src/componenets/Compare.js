@@ -226,12 +226,12 @@ const HomeView = () => {
 const TableView = (props) => {
     const classes = useStyles();
     let rows = props.rows;
+    const fromCurrency = props.fromCurrency;
+    const toCurrency = props.toCurrency;
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('name');
     const [selected, setSelected] = React.useState([]);
     const [selectedProviders, setSelectedProviders] = useState([]);
-    const [restoredPerviousData, setRestoredPreviousData] = useState()
-        ;
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -322,9 +322,9 @@ const TableView = (props) => {
                                                         <img src={row.logo} alt={row.name} style={{ height: 60, width: 100 }} />
                                                     </StyledTableCell>
                                                     <StyledTableCell align="center">{row.name}</StyledTableCell>
-                                                    <StyledTableCell align="center">{row.exchange}</StyledTableCell>
-                                                    <StyledTableCell align="center">{row.fee}</StyledTableCell>
-                                                    <StyledTableCell align="center">{row.receivedAmount}</StyledTableCell>
+                                                    <StyledTableCell align="center">{row.exchange} {fromCurrency}</StyledTableCell>
+                                                    <StyledTableCell align="center">{row.fee} {fromCurrency}</StyledTableCell>
+                                                    <StyledTableCell align="center">{row.receivedAmount} {toCurrency}</StyledTableCell>
                                                     <StyledTableCell align="center">
                                                         <TransitionsModal data={props} />
                                                     </StyledTableCell>
@@ -369,10 +369,10 @@ const Compare = (props) => {
                             return {
                                 'logo': row.logo,
                                 'name': row.name,
-                                'exchange': row.quotes[0].rate,
-                                'fee': row.quotes[0].fee,
-                                'receivedAmount': row.quotes[0].receivedAmount,
-                                'markup' : row.quotes[0].markup
+                                'exchange': row.quotes[0].rate.toFixed(2),
+                                'fee': row.quotes[0].fee.toFixed(2),
+                                'receivedAmount': row.quotes[0].receivedAmount.toFixed(2),
+                                'markup': row.quotes[0].markup.toFixed(2)
                             }
                         }));
                         setRowData(temp[0])

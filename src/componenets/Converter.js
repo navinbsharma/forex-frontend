@@ -234,6 +234,7 @@ function Converter(props) {
             });
         }else{
             setAmountError("Please Enter Some Amount!!!")
+            setFlagState(0);
         }
         
     }
